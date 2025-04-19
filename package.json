@@ -1,0 +1,27 @@
+{
+  "name": "usmle-practice",
+  "version": "1.0.0",
+  "description": "A simple web app for USMLE practice questions",
+  "main": "index.html",
+  "scripts": {
+    "db:init": "node db_init.js",
+    "db:upload": "node db_upload_questions.js",
+    "db:config": "node db_show_config.js",
+    "db:update-config": "node db_update_config.js",
+    "start": "npx serve"
+  },
+  "bin": {
+    "usmle-db-init": "./db_init.js",
+    "usmle-db-upload": "./db_upload_questions.js",
+    "usmle-db-config": "./db_show_config.js",
+    "usmle-db-update-config": "./db_update_config.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.4",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+} 

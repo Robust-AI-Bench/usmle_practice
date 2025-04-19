@@ -1,0 +1,59 @@
+We are creating a simple website that helps medical students practice for the USMLE exam. 
+
+The main user interface is a screen with one question and a set of multiple choice options aswell as the option to flag that the question makes no sense or the correct answer is not here. 
+
+When the user answers they immediatly get feedback on whether they got it right or wrong. After which the user can again flag that they think there is a mistake in the answer or question. 
+
+When the user flags a quesiton has an error they get a text field where they can explain more details about what they think the problem is but the text field is not required. 
+
+All the questions are pulled from a postgres database that we query via supabase postREST.  Each question has a set of options and one correct answer saved in the database. 
+
+This is a simple html5 website using bootstrap and vanilla javascript  no react.  
+
+When the page loads it should get 20 questions from the database and then there should be no loading until the user finishes 90% of the questions. Once they are that far then in the background we can load the next set of questions. 
+
+
+Every user's answer is saved in the database.  Users do not need to login but when they first arrive on the clideside we simply create a user_UUID and set a cookie (or local browser storage or indexedDB) which will be sent to the server with every request. We also do some simple js fingerprint and collect their ip addres so we can potentially link together multiple user_id's  together later. If they come to the site again on the same device it should remember their ID from the cookie and pull up their user data so that they don't need to answer the same questions again. 
+Most of the user identity can be handled by supabase using signInAnonymously()   . 
+
+Simply for error tracking we will also keep track of all the questions a user has answered in the browsers local storage and throw an alert in the console if we have seen this data before.  This is just a check to see that our code is running correctly  the server should already be selecting the right questions for each user to not show them repeats. 
+
+Additionally we locally keep track of the max question_id per question_set that the user has answered. And this max question_ids are sent in the request to the server so that it does not pull the same questions again. Questions are pulled in order of question_id. Each of the configured question_sets to pull from is queried seperatly because each has a sepearte max question_id that the user has answered. 
+
+There is a configuration table in postgres with just one row of json data that defines the current question sets that we want users to work on and the percentages of each question_set users should see.  To start with there will be two question sets:   medQA   and     synthNew     . 
+Also this configuration defines the max number of stored user answers we have in the database before it should be excluded. By default we can exclude questions that have answers or flags saved by 5 different users. This configuration of max answers is set per question_set. medQA has no max number of answers and synthNew has a max of 5 per question. 
+
+
+
+
+We will create a simple admin CLI tool that lets us upload new questions to the database reading in a JSON or JSONL or CSV file mapping the columns  or json fields and giving the question set being uploaded a name. 
+When a question is uploaded it should get a question_id  that is set by the database as auto incremented. 
+But also the raw text data should be hashed into a question_hash column using sha256. 
+
+Here is an example of the schema of one row of a JSONL  file which may be uplaoded 
+{"question": "A previously healthy 28-year-old man comes to the emergency department because of dizziness and palpitations for 2 days. Prior to the onset of the symptoms, he attended a bachelor party where he lost several drinking games. An ECG is shown. Which of the following is the most likely diagnosis?", "answer": "Paroxysmal atrial fibrillation", "options": {"A": "Hypertrophic obstructive cardiomoyopathy", "B": "Paroxysmal atrial fibrillation", "C": "Brugada syndrome", "D": "Ventricular tachycardia", "E": "Sick sinus syndrome"}, "meta_info": "step1", "answer_idx": "B"}
+
+There is a table which records all answers and flags by all users for all questions.  The question should be referenced by question_id and question_hash.  This table allows for inserts but no deletes  with the supabase_anon_key. 
+
+There should be a simple CLI command to initiate the database. This cli command should run create if not exist statements for all the tables.   I don't want to do any selection inside the cli just give me individual commands that do one thing each anad read local configs or dotenv. 
+
+Postgres on supabase with postREST.  Is the only so called serverless solution we will use. Other than that the website logic is only client side javascript.
+
+Relevant keys and secrets are stored in the .env file. 
+I have already set them they are called 
+postgres_password 
+supabase_server 
+supabase_anon_key 
+supabase_service_key 
+
+
+THe supabase_service_key  should only be used to change the database and insert data. 
+
+The supabase_anon_key  is the only thing that should be used for the client side javascript. 
+
+--- follow up comments 
+
+Make sure db_cli.js closes after its done upload 
+
+Split db_cli.js  into sepearte files each for oen command  .    like  db_init.js   and db_upload_questions.js     db_show_config.js 
+ db_update_config.js 
