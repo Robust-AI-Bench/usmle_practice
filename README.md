@@ -107,5 +107,5 @@ Questions should be in JSON or JSONL format with the following structure:
 - **questions**: Stores all questions with their options and correct answers
 - **user_answers**: Records user answers for each question
 - **question_flags**: Stores flags submitted by users for problematic questions
-- **user_fingerprints**: Stores user identification data for tracking
+- **user_fingerprints**: Stores user identification data for tracking, including fingerprint hash, IP information from ipinfo.io, and user agent
 - **configuration**: Stores app configuration, including question set percentages 

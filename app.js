@@ -31,9 +31,37 @@ let questionSetMaxIds = {};
 let selectedAnswer = null;
 let answeredQuestions = {};
 let flaggedQuestions = {}; // Track which questions have been flagged
+let isDebugMode = false; // Track if debug mode is enabled
+let specificQuestionSet = null; // Track if a specific question set is requested
+let namedParam = null; // Store the value of the "named" parameter
 
 // Initialize the application
 async function initApp() {
+    // Parse URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const debugParam = urlParams.get('debug');
+    
+    // Set debug mode if debug=1 or debug=true
+    isDebugMode = debugParam === '1' || debugParam === 'true';
+    console.log('Debug mode:', isDebugMode);
+    
+    // Hide question set badge if not in debug mode
+    if (!isDebugMode) {
+        questionSet.style.display = 'none';
+    }
+    
+    // Check for specific question set filter
+    specificQuestionSet = urlParams.get('qs');
+    if (specificQuestionSet) {
+        console.log(`Filtering to specific question set: ${specificQuestionSet}`);
+    }
+    
+    // Get "named" parameter from URL
+    namedParam = urlParams.get('named');
+    if (namedParam) {
+        console.log(`Named parameter: ${namedParam}`);
+    }
+    
     await checkOrCreateUser();
     await loadConfig();
     await loadQuestions();
@@ -81,24 +109,79 @@ async function checkOrCreateUser() {
 
 // Collect browser fingerprint for user linking
 async function collectFingerprint() {
-    if (window.Fingerprint2) {
-        await new Promise(resolve => {
-            Fingerprint2.get(components => {
-                const fingerprint = Fingerprint2.x64hash128(components.map(c => c.value).join(''), 31);
-                
-                // Store the fingerprint with the user
-                supabaseClient.from('user_fingerprints').insert({
-                    user_id: currentUser.id,
-                    fingerprint: fingerprint,
-                    ip_address: '', // IP is captured server-side by Supabase
-                    user_agent: navigator.userAgent
-                }).then(({ error }) => {
-                    if (error) console.error('Error storing fingerprint:', error);
-                    resolve();
+    try {
+        // Get IP info with timeout
+        let ipInfoData = null;
+        try {
+            ipInfoData = await getIpInfo();
+            console.log('Successfully collected IP info');
+        } catch (ipError) {
+            console.warn('Could not collect IP info:', ipError);
+        }
+        
+        if (window.Fingerprint2) {
+            await new Promise(resolve => {
+                Fingerprint2.get(components => {
+                    const fingerprint = Fingerprint2.x64hash128(components.map(c => c.value).join(''), 31);
+                    
+                    // Store the fingerprint with the user
+                    supabaseClient.from('user_fingerprints').insert({
+                        user_id: currentUser.id,
+                        fingerprint: fingerprint,
+                        ip_address: '', // IP is captured server-side by Supabase
+                        user_agent: navigator.userAgent,
+                        ip_info_io: ipInfoData, // Add the IP info data as JSONB
+                        named: namedParam // Add the named parameter
+                    }).then(({ error }) => {
+                        if (error) console.error('Error storing fingerprint:', error);
+                        resolve();
+                    });
                 });
             });
-        });
+        }
+    } catch (error) {
+        console.error('Error in collectFingerprint:', error);
     }
+}
+
+// Get IP info from ipinfo.io with timeout
+async function getIpInfo() {
+    // First check if we already have IP info in local storage
+ 
+
+    return new Promise((resolve, reject) => {
+        // Set timeout to 3 seconds
+        const timeoutId = setTimeout(() => {
+            reject(new Error('Request to ipinfo.io timed out'));
+        }, 3000);
+        
+        fetch('https://ipinfo.io', {
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            clearTimeout(timeoutId);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Save to localStorage on success
+            try {
+                localStorage.setItem('ipInfo', JSON.stringify(data));
+                console.log('Saved IP info to local storage');
+            } catch (storageError) {
+                console.warn('Could not save IP info to local storage:', storageError);
+            }
+            resolve(data);
+        })
+        .catch(error => {
+            clearTimeout(timeoutId);
+            reject(error);
+        });
+    });
 }
 
 // Load configuration from database
@@ -151,8 +234,25 @@ async function loadQuestions() {
         console.log('Loading questions with:', questionSets);
         console.log('Current max question IDs:', questionSetMaxIds);
         
+        // Filter question sets if a specific set is requested
+        let setsToLoad = questionSets;
+        if (specificQuestionSet) {
+            // Only load the specified question set with 100% percentage
+            setsToLoad = questionSets.filter(set => set.name === specificQuestionSet);
+            
+            // If the requested set doesn't exist, create a temporary configuration for it
+            if (setsToLoad.length === 0) {
+                setsToLoad = [{ name: specificQuestionSet, percentage: 100, max_answers: null }];
+            } else {
+                // Override the percentage to 100%
+                setsToLoad = setsToLoad.map(set => ({ ...set, percentage: 100 }));
+            }
+            
+            console.log(`Filtering to load only question set: ${specificQuestionSet}`, setsToLoad);
+        }
+        
         // Load questions from each question set based on percentage
-        for (const setConfig of questionSets) {
+        for (const setConfig of setsToLoad) {
             const maxId = questionSetMaxIds[setConfig.name] || 0;
             const count = Math.floor(20 * (setConfig.percentage / 100));
             
@@ -261,7 +361,15 @@ function displayQuestion() {
     
     // Update the question display
     questionNumber.textContent = `Question ${currentQuestionIndex + 1}/${currentQuestions.length}`;
-    questionSet.textContent = question.set;
+    
+    // Only display question set if in debug mode
+    if (isDebugMode) {
+        questionSet.textContent = question.set;
+        questionSet.style.display = 'block';
+    } else {
+        questionSet.style.display = 'none';
+    }
+    
     questionText.textContent = question.question;
     
     // Clear the options container
@@ -563,7 +671,22 @@ async function loadMoreQuestions() {
         // Use the same approach as loadQuestions
         let newQuestions = [];
         
-        for (const setConfig of questionSets) {
+        // Filter question sets if a specific set is requested
+        let setsToLoad = questionSets;
+        if (specificQuestionSet) {
+            // Only load the specified question set with 100% percentage
+            setsToLoad = questionSets.filter(set => set.name === specificQuestionSet);
+            
+            // If the requested set doesn't exist, create a temporary configuration for it
+            if (setsToLoad.length === 0) {
+                setsToLoad = [{ name: specificQuestionSet, percentage: 100, max_answers: null }];
+            } else {
+                // Override the percentage to 100%
+                setsToLoad = setsToLoad.map(set => ({ ...set, percentage: 100 }));
+            }
+        }
+        
+        for (const setConfig of setsToLoad) {
             const maxId = questionSetMaxIds[setConfig.name] || 0;
             const count = Math.floor(10 * (setConfig.percentage / 100)); // Load 10 more questions
             

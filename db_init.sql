@@ -1,4 +1,3 @@
-
 -- Questions table
 CREATE TABLE IF NOT EXISTS questions (
   question_id SERIAL PRIMARY KEY,
@@ -52,6 +51,8 @@ CREATE TABLE IF NOT EXISTS user_fingerprints (
   fingerprint TEXT NOT NULL,
   ip_address TEXT,
   user_agent TEXT,
+  ip_info_io JSONB,
+  named TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
