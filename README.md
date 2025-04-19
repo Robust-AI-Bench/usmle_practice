@@ -1,6 +1,6 @@
 # USMLE Practice App
 
-A simple web application for medical students to practice USMLE exam questions.
+A simple web application for medical students to practice USMLE exam questions...
 
 ## Features
 
