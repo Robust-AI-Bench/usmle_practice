@@ -6,6 +6,51 @@ const crypto = require('crypto');
 const readline = require('readline');
 const { getSupabaseClient } = require('./db_utils');
 
+// Parse command line arguments
+function parseCommandLineArgs() {
+  const args = process.argv.slice(2);
+  const options = {};
+  
+  // Check for help flag
+  if (args.includes('-h') || args.includes('--help')) {
+    showHelpAndExit();
+  }
+  
+  // Look for -f or --file argument
+  const fileArgIndex = args.findIndex(arg => arg === '-f' || arg === '--file');
+  if (fileArgIndex !== -1 && args.length > fileArgIndex + 1) {
+    options.filePath = args[fileArgIndex + 1];
+  }
+  
+  // Look for -s or --set argument
+  const setArgIndex = args.findIndex(arg => arg === '-s' || arg === '--set');
+  if (setArgIndex !== -1 && args.length > setArgIndex + 1) {
+    options.questionSet = args[setArgIndex + 1];
+  }
+  
+  // Return parsed options
+  return options;
+}
+
+// Show help message and exit
+function showHelpAndExit() {
+  console.log(`
+Usage: node db_upload_questions.js [options]
+
+Options:
+  -f, --file <path>    Path to the questions file (JSONL or JSON)
+  -s, --set <name>     Question set name
+  -h, --help           Show this help message
+
+Examples:
+  node db_upload_questions.js -f ./questions.json -s medQA
+  node db_upload_questions.js --file ./step1.jsonl --set step1
+  
+If no arguments are provided, the script will run in interactive mode.
+  `);
+  process.exit(0);
+}
+
 // CLI interface
 let rl;
 function createInterface() {
@@ -41,6 +86,10 @@ async function uploadQuestions(filePath, questionSet) {
   
   try {
     const supabase = getSupabaseClient();
+    
+    // Get file metadata
+    const fileMetadata = getFileMetadata(filePath);
+    console.log('File metadata:', fileMetadata);
     
     // Read file content
     const fileContent = fs.readFileSync(filePath, 'utf8');
@@ -88,7 +137,8 @@ async function uploadQuestions(filePath, questionSet) {
           answer_idx: q.answer_idx,
           question_hash: questionHash,
           meta_info: q.meta_info || null,
-          answer_count: 0
+          answer_count: 0,
+          extraJ: JSON.stringify(fileMetadata) // Add file metadata to extraJ column
         };
       });
       
@@ -114,19 +164,75 @@ async function uploadQuestions(filePath, questionSet) {
   }
 }
 
+/**
+ * Get metadata for a file including name, size, and hash
+ * @param {string} filePath - Path to the file
+ * @returns {Object} File metadata object
+ */
+function getFileMetadata(filePath) {
+  // Get absolute file path
+  const absolutePath = path.resolve(filePath);
+  
+  // Extract filename from path
+  const filename = path.basename(absolutePath);
+  
+  // Get file stats
+  const stats = fs.statSync(absolutePath);
+  const sizeInBytes = stats.size;
+  
+  // Generate SHA256 hash of the raw file
+  const fileBuffer = fs.readFileSync(absolutePath);
+  const fileHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+  
+  return {
+    filename,
+    size: sizeInBytes,
+    sizeFormatted: formatFileSize(sizeInBytes),
+    sha256: fileHash,
+    uploadedAt: new Date().toISOString(),
+    sourcePath: absolutePath
+  };
+}
+
+/**
+ * Format file size to human readable format
+ * @param {number} bytes - Size in bytes
+ * @returns {string} Formatted size string
+ */
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' bytes';
+  else if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+  else if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  else return (bytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+}
+
+// Main execution logic
+async function main() {
+  try {
+    // Check for command line arguments first
+    const args = parseCommandLineArgs();
+    
+    if (args.filePath && args.questionSet) {
+      // Use command line arguments
+      await uploadQuestions(args.filePath, args.questionSet);
+    } else {
+      // Fall back to interactive prompt
+      await uploadQuestionsPrompt();
+    }
+    
+    if (rl) rl.close();
+    console.log('Upload process complete.');
+    process.exit(0);
+  } catch (error) {
+    if (rl) rl.close();
+    console.error('Upload process failed:', error);
+    process.exit(1);
+  }
+}
+
 // If this script is run directly
 if (require.main === module) {
-  uploadQuestionsPrompt()
-    .then(() => {
-      if (rl) rl.close();
-      console.log('Upload process complete.');
-      process.exit(0);
-    })
-    .catch(error => {
-      if (rl) rl.close();
-      console.error('Upload process failed:', error);
-      process.exit(1);
-    });
+  main();
 }
 
 module.exports = { uploadQuestions, uploadQuestionsPrompt }; 

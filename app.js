@@ -229,7 +229,7 @@ async function loadQuestions() {
     questionContainer.style.display = 'none';
     
     try {
-        let allQuestions = [];
+        let questionsFromSets = {}; // Store questions organized by set
         
         console.log('Loading questions with:', questionSets);
         console.log('Current max question IDs:', questionSetMaxIds);
@@ -250,6 +250,11 @@ async function loadQuestions() {
             
             console.log(`Filtering to load only question set: ${specificQuestionSet}`, setsToLoad);
         }
+        
+        // Initialize question arrays for each set
+        setsToLoad.forEach(set => {
+            questionsFromSets[set.name] = [];
+        });
         
         // Load questions from each question set based on percentage
         for (const setConfig of setsToLoad) {
@@ -297,9 +302,8 @@ async function loadQuestions() {
                 console.log(`Received ${data ? data.length : 0} questions from ${setConfig.name}`);
                 
                 if (data && data.length > 0) {
-                    allQuestions = allQuestions.concat(
-                        data.map(q => ({ ...q, set: setConfig.name }))
-                    );
+                    // Store questions by set
+                    questionsFromSets[setConfig.name] = data.map(q => ({ ...q, set: setConfig.name }));
                 } else {
                     console.log(`No questions returned for ${setConfig.name}`);
                 }
@@ -308,6 +312,9 @@ async function loadQuestions() {
                 // Continue with other sets instead of aborting completely
             }
         }
+        
+        // Interleave questions from different sets
+        let allQuestions = interleaveQuestions(questionsFromSets);
         
         if (allQuestions.length === 0) {
             console.log('No questions found');
@@ -342,6 +349,76 @@ async function loadQuestions() {
     }
 }
 
+/**
+ * Interleave questions from different sets to ensure randomization
+ * @param {Object} questionsFromSets - Object with question sets as keys and arrays of questions as values
+ * @returns {Array} Interleaved questions from all sets
+ */
+function interleaveQuestions(questionsFromSets) {
+    // First get all set names that have questions
+    const setsWithQuestions = Object.keys(questionsFromSets).filter(
+        setName => questionsFromSets[setName].length > 0
+    );
+    
+    if (setsWithQuestions.length === 0) {
+        return [];
+    }
+    
+    if (setsWithQuestions.length === 1) {
+        // If only one set has questions, shuffle those and return
+        return shuffleArray([...questionsFromSets[setsWithQuestions[0]]]);
+    }
+    
+    // Get the maximum number of questions from any set
+    const maxQuestions = Math.max(...setsWithQuestions.map(
+        setName => questionsFromSets[setName].length
+    ));
+    
+    // Create a shuffled order of sets to use for interleaving
+    let setOrder = [];
+    for (let i = 0; i < maxQuestions; i++) {
+        // For each position, add all sets that still have questions at this index
+        const availableSets = setsWithQuestions.filter(
+            setName => i < questionsFromSets[setName].length
+        );
+        // Add them in random order
+        setOrder = setOrder.concat(shuffleArray([...availableSets]));
+    }
+    
+    // Use the set order to build the interleaved questions array
+    const interleavedQuestions = [];
+    const usedIndices = {}; // Track which indices we've used for each set
+    
+    // Initialize used indices counters
+    setsWithQuestions.forEach(setName => {
+        usedIndices[setName] = 0;
+    });
+    
+    // Build the interleaved array
+    setOrder.forEach(setName => {
+        if (usedIndices[setName] < questionsFromSets[setName].length) {
+            interleavedQuestions.push(questionsFromSets[setName][usedIndices[setName]]);
+            usedIndices[setName]++;
+        }
+    });
+    
+    return interleavedQuestions;
+}
+
+/**
+ * Shuffle an array using the Fisher-Yates algorithm
+ * @param {Array} array - Array to shuffle
+ * @returns {Array} Shuffled array
+ */
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 // Display the current question
 function displayQuestion() {
     if (currentQuestionIndex >= currentQuestions.length) {
@@ -360,13 +437,14 @@ function displayQuestion() {
     }
     
     // Update the question display
-    questionNumber.textContent = `Question ${currentQuestionIndex + 1}/${currentQuestions.length}`;
-    
-    // Only display question set if in debug mode
     if (isDebugMode) {
+        // When in debug mode, show question ID and other debug info
+        questionNumber.textContent = `Question ${currentQuestionIndex + 1}/${currentQuestions.length} [ID: ${question.question_id}]`;
         questionSet.textContent = question.set;
         questionSet.style.display = 'block';
     } else {
+        // Regular display without debug info
+        questionNumber.textContent = `Question ${currentQuestionIndex + 1}/${currentQuestions.length}`;
         questionSet.style.display = 'none';
     }
     
@@ -669,7 +747,7 @@ async function loadMoreQuestions() {
         const currentIndexSnapshot = currentQuestionIndex;
         
         // Use the same approach as loadQuestions
-        let newQuestions = [];
+        let questionsFromSets = {}; // Store questions from each set
         
         // Filter question sets if a specific set is requested
         let setsToLoad = questionSets;
@@ -685,6 +763,11 @@ async function loadMoreQuestions() {
                 setsToLoad = setsToLoad.map(set => ({ ...set, percentage: 100 }));
             }
         }
+        
+        // Initialize question arrays for each set
+        setsToLoad.forEach(set => {
+            questionsFromSets[set.name] = [];
+        });
         
         for (const setConfig of setsToLoad) {
             const maxId = questionSetMaxIds[setConfig.name] || 0;
@@ -713,14 +796,16 @@ async function loadMoreQuestions() {
                 }
                 
                 if (data && data.length > 0) {
-                    newQuestions = newQuestions.concat(
-                        data.map(q => ({ ...q, set: setConfig.name }))
-                    );
+                    // Store questions by set
+                    questionsFromSets[setConfig.name] = data.map(q => ({ ...q, set: setConfig.name }));
                 }
             } catch (setError) {
                 console.error(`Error loading more questions from ${setConfig.name}:`, setError);
             }
         }
+        
+        // Interleave questions from different sets
+        const newQuestions = interleaveQuestions(questionsFromSets);
         
         if (newQuestions.length > 0) {
             console.log(`Loaded ${newQuestions.length} more questions`);
