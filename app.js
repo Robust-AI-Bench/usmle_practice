@@ -30,6 +30,7 @@ let questionSets = [];
 let questionSetMaxIds = {};
 let selectedAnswer = null;
 let answeredQuestions = {};
+let flaggedQuestions = {}; // Track which questions have been flagged
 
 // Initialize the application
 async function initApp() {
@@ -330,6 +331,14 @@ function displayQuestion() {
     feedbackContainer.style.display = 'none';
     flagFormContainer.style.display = 'none';
     
+    // Check if the current question has been flagged and update flag button visibility
+    const questionKey = `${question.question_id}-${question.question_hash}`;
+    if (flaggedQuestions[questionKey]) {
+        flagAnswerBtn.style.display = 'none';
+    } else {
+        flagAnswerBtn.style.display = 'block';
+    }
+    
     // Show the question container and hide loading
     questionContainer.style.display = 'block';
     loadingElement.style.display = 'none';
@@ -513,7 +522,11 @@ submitFlagBtn.addEventListener('click', async () => {
         // Remove alert message but keep the UI transitions
         flagFormContainer.style.display = 'none';
         
-        // Remove the flag button from the feedback container to prevent multiple flags
+        // Track this question as flagged
+        const questionKey = `${question.question_id}-${question.question_hash}`;
+        flaggedQuestions[questionKey] = true;
+        
+        // Remove the flag button for this specific question only
         flagAnswerBtn.style.display = 'none';
         
         // Show the feedback container
@@ -533,14 +546,71 @@ continueBtn.addEventListener('click', () => {
 // Restart the quiz
 restartBtn.addEventListener('click', () => {
     completionContainer.style.display = 'none';
+    // Show the continue button in case it was hidden
+    continueBtn.style.display = 'block';
     loadQuestions();
 });
 
 // Load more questions in the background
 async function loadMoreQuestions() {
     console.log('Loading more questions in the background...');
-    // Implementation is the same as loadQuestions, but doesn't update the UI
-    // Will be used once the user has answered 90% of the current questions
+    
+    try {
+        // Create a copy of the current questions
+        const currentQuestionsSnapshot = [...currentQuestions];
+        const currentIndexSnapshot = currentQuestionIndex;
+        
+        // Use the same approach as loadQuestions
+        let newQuestions = [];
+        
+        for (const setConfig of questionSets) {
+            const maxId = questionSetMaxIds[setConfig.name] || 0;
+            const count = Math.floor(10 * (setConfig.percentage / 100)); // Load 10 more questions
+            
+            if (count <= 0) continue;
+            
+            try {
+                // Query with the same format as loadQuestions
+                let query = supabaseClient
+                    .from('questions')
+                    .select('*')
+                    .eq('question_set', setConfig.name)
+                    .gt('question_id', maxId)
+                    .order('question_id', { ascending: true });
+                
+                if (setConfig.max_answers !== null) {
+                    query = query.lt('answer_count', setConfig.max_answers);
+                }
+                
+                const { data, error } = await query.limit(count);
+                
+                if (error) {
+                    console.error(`Error querying more questions from ${setConfig.name}:`, error);
+                    continue;
+                }
+                
+                if (data && data.length > 0) {
+                    newQuestions = newQuestions.concat(
+                        data.map(q => ({ ...q, set: setConfig.name }))
+                    );
+                }
+            } catch (setError) {
+                console.error(`Error loading more questions from ${setConfig.name}:`, setError);
+            }
+        }
+        
+        if (newQuestions.length > 0) {
+            console.log(`Loaded ${newQuestions.length} more questions`);
+            currentQuestions = [...currentQuestions, ...newQuestions];
+            
+            // Always show continue button when more questions are loaded
+            continueBtn.style.display = 'block';
+        } else {
+            console.log('No more questions available');
+        }
+    } catch (error) {
+        console.error('Error loading more questions:', error);
+    }
 }
 
 // Initialize the app when the page loads
