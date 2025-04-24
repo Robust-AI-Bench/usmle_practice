@@ -6,6 +6,12 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
 // Redirect URL after successful authentication - point to index.html instead of app.html
 const redirectUrl = 'index.html';
 
+// Get redirect parameter from URL if available
+const urlParams = new URLSearchParams(window.location.search);
+const redirectParam = urlParams.get('redirect');
+// If redirect parameter is set, use it for redirection after login
+const finalRedirectUrl = redirectParam || redirectUrl;
+
 // DOM Elements
 const loginForm = document.getElementById('loginForm');
 const loginEmail = document.getElementById('loginEmail');
@@ -51,7 +57,7 @@ loginForm.addEventListener('submit', async (e) => {
         
         // Redirect after successful login
         setTimeout(() => {
-            window.location.href = redirectUrl;
+            window.location.href = finalRedirectUrl;
         }, 2000);
         
     } catch (error) {
@@ -89,7 +95,7 @@ signupForm.addEventListener('submit', async (e) => {
             email: signupEmail.value,
             password: signupPassword.value,
             options: {
-                emailRedirectTo: redirectUrl
+                emailRedirectTo: finalRedirectUrl
             }
         });
         
@@ -122,7 +128,7 @@ magicLinkForm.addEventListener('submit', async (e) => {
             email: magicLinkEmail.value,
             options: {
                 shouldCreateUser: true,
-                emailRedirectTo: redirectUrl
+                emailRedirectTo: finalRedirectUrl
             }
         });
         
@@ -173,7 +179,7 @@ async function checkOtpConfirmation() {
             }
             
             alert('You have been successfully authenticated!');
-            window.location.href = redirectUrl;
+            window.location.href = finalRedirectUrl;
             
         } catch (error) {
             console.error('Auth confirmation error:', error);
