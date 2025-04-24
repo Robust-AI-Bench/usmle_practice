@@ -143,12 +143,31 @@
         </div>
     </div>
 
+    <!-- Initialize Supabase first -->
     <script>
-        // Initialize Supabase client
+        // Initialize Supabase client explicitly before loading other scripts
         const supabaseUrl = 'https://jrfpjposoiuqdadqjfww.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyZnBqcG9zb2l1cWRhZHFqZnd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwNzU3NzgsImV4cCI6MjA2MDY1MTc3OH0.iAvSNpaJwqgKBwCaNuIt5wjGe1cLckNMK2Mo3bz2WXQ';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
         
+        // Store values in the global window object for browser_upload.js to use
+        window.supabaseUrl = supabaseUrl;
+        window.supabaseAnonKey = supabaseAnonKey;
+        
+        // Create the client if not already created
+        if (typeof window.supabaseClient === 'undefined') {
+            console.log("Initializing Supabase client for upload page");
+            try {
+                window.supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+                console.log("Supabase client initialized successfully");
+            } catch (e) {
+                console.error("Error initializing Supabase client:", e);
+                alert("Failed to initialize database connection. Please refresh the page.");
+            }
+        }
+    </script>
+    
+    <!-- User authentication script -->
+    <script>
         // DOM Elements for user info
         const userSection = document.getElementById('userSection');
         const guestSection = document.getElementById('guestSection');
@@ -157,70 +176,74 @@
         
         // Check if user is logged in
         async function checkSession() {
-            const { data, error } = await supabaseClient.auth.getSession();
-            
-            if (data && data.session) {
-                // User is logged in, show user section
-                userSection.style.display = 'block';
-                guestSection.style.display = 'none';
+            try {
+                const { data, error } = await window.supabaseClient.auth.getSession();
                 
-                // Get user info
-                const { data: userData } = await supabaseClient.auth.getUser();
-                if (userData && userData.user) {
-                    // Store user ID
-                    const userId = userData.user.id;
-                    localStorage.setItem('userId', userId);
+                if (data && data.session) {
+                    // User is logged in, show user section
+                    userSection.style.display = 'block';
+                    guestSection.style.display = 'none';
                     
-                    // Get email if available
-                    const userEmail = userData.user.email || "";
-                    
-                    // Try to get named value from user_fingerprints table
-                    let displayName = "";
-                    
-                    // First check localStorage for named value
-                    const storedName = localStorage.getItem('userName');
-                    if (storedName) {
-                        displayName = storedName;
-                    } else {
-                        // Try to fetch named from user_fingerprints table
-                        try {
-                            const { data: fingerprintData, error: fingerprintError } = await supabaseClient
-                                .from('user_fingerprints')
-                                .select('named')
-                                .eq('user_id', userId)
-                                .single();
-                                
-                            if (!fingerprintError && fingerprintData && fingerprintData.named) {
-                                displayName = fingerprintData.named;
-                                // Store for future use
-                                localStorage.setItem('userName', displayName);
+                    // Get user info
+                    const { data: userData } = await window.supabaseClient.auth.getUser();
+                    if (userData && userData.user) {
+                        // Store user ID
+                        const userId = userData.user.id;
+                        localStorage.setItem('userId', userId);
+                        
+                        // Get email if available
+                        const userEmail = userData.user.email || "";
+                        
+                        // Try to get named value from user_fingerprints table
+                        let displayName = "";
+                        
+                        // First check localStorage for named value
+                        const storedName = localStorage.getItem('userName');
+                        if (storedName) {
+                            displayName = storedName;
+                        } else {
+                            // Try to fetch named from user_fingerprints table
+                            try {
+                                const { data: fingerprintData, error: fingerprintError } = await window.supabaseClient
+                                    .from('user_fingerprints')
+                                    .select('named')
+                                    .eq('user_id', userId)
+                                    .single();
+                                    
+                                if (!fingerprintError && fingerprintData && fingerprintData.named) {
+                                    displayName = fingerprintData.named;
+                                    // Store for future use
+                                    localStorage.setItem('userName', displayName);
+                                }
+                            } catch (e) {
+                                console.error("Error fetching user fingerprint data:", e);
                             }
-                        } catch (e) {
-                            console.error("Error fetching user fingerprint data:", e);
                         }
+                        
+                        // Update welcome message with user ID, email and name if available
+                        let welcomeMessage = `ID: <span style="font-size: 0.8rem;">${userId}</span>`;
+                        if (userEmail) {
+                            welcomeMessage += ` | Email: ${userEmail}`;
+                        }
+                        if (displayName) {
+                            welcomeMessage += ` | Name: ${displayName}`;
+                        }
+                        welcomeUser.innerHTML = welcomeMessage;
                     }
-                    
-                    // Update welcome message with user ID, email and name if available
-                    let welcomeMessage = `ID: <span style="font-size: 0.8rem;">${userId}</span>`;
-                    if (userEmail) {
-                        welcomeMessage += ` | Email: ${userEmail}`;
-                    }
-                    if (displayName) {
-                        welcomeMessage += ` | Name: ${displayName}`;
-                    }
-                    welcomeUser.innerHTML = welcomeMessage;
+                } else {
+                    // User is not logged in, show guest section
+                    userSection.style.display = 'none';
+                    guestSection.style.display = 'block';
                 }
-            } else {
-                // User is not logged in, show guest section
-                userSection.style.display = 'none';
-                guestSection.style.display = 'block';
+            } catch (error) {
+                console.error("Error checking session:", error);
             }
         }
         
         // Handle logout
         if (logoutBtn) {
             logoutBtn.addEventListener('click', async () => {
-                const { error } = await supabaseClient.auth.signOut();
+                const { error } = await window.supabaseClient.auth.signOut();
                 
                 if (!error) {
                     // Clear local storage and reload page
@@ -237,6 +260,7 @@
         });
     </script>
     
+    <!-- Upload functionality -->
     <script src="browser_upload.js"></script>
 </body>
 </html> 

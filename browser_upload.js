@@ -1,6 +1,38 @@
 // Browser-side upload functionality
 // Adapting server-side upload.js for browser environment
 
+// Verify Supabase client availability
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if Supabase client is available
+    if (!window.supabaseClient) {
+        console.error("Supabase client is not initialized");
+        showInitAlert("Database connection not available. Please refresh the page and try again.");
+        return;
+    }
+    
+    // Verify client has expected methods
+    if (typeof window.supabaseClient.from !== 'function') {
+        console.error("Supabase client is missing the 'from' method:", window.supabaseClient);
+        showInitAlert("Invalid database client. Please refresh the page and try again.");
+        return;
+    }
+    
+    console.log("Supabase client verified successfully");
+});
+
+// Display initial alert for critical errors
+function showInitAlert(message) {
+    const alertContainer = document.getElementById('alert-container');
+    if (alertContainer) {
+        const alertElement = document.createElement('div');
+        alertElement.className = 'alert alert-danger';
+        alertElement.innerHTML = `<strong>Error:</strong> ${message}`;
+        alertContainer.appendChild(alertElement);
+    } else {
+        alert(message);
+    }
+}
+
 // DOM Elements
 const uploadForm = document.getElementById('uploadForm');
 const questionSetInput = document.getElementById('questionSet');
@@ -159,14 +191,49 @@ async function handleUpload(e) {
         // Read file content
         const fileContent = await readFileContent(selectedFile);
         
+        // Show initial alert
+        showAlert('info', 'Parsing file content...');
+        
         // Parse questions
-        const questions = parseFileContent(fileContent, selectedFile.name);
+        let questions;
+        try {
+            questions = parseFileContent(fileContent, selectedFile.name);
+        } catch (parseError) {
+            // Add more detailed error for parsing failures
+            console.error('Parse error:', parseError);
+            
+            // Try to show a sample of the file content to help with debugging
+            let contentSample = fileContent.substring(0, 500);
+            contentSample = contentSample.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            
+            throw new Error(`
+                Failed to parse file: ${parseError.message}<br>
+                <br>
+                <strong>Sample of file content:</strong><br>
+                <pre class="bg-light p-2" style="font-size: 0.8rem; max-height: 150px; overflow: auto;">${contentSample}...</pre>
+                <br>
+                <strong>Expected format:</strong><br>
+                <code>{"question": "...", "options": ["A", "B", "C", "D"], "answer": "A"}</code>
+            `);
+        }
         
         if (!questions || questions.length === 0) {
             throw new Error('No valid questions found in the file.');
         }
         
         showAlert('info', `Found ${questions.length} questions to upload.`);
+        
+        // Add a debug button only in development environments
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            const debugBtn = document.createElement('button');
+            debugBtn.className = 'btn btn-sm btn-secondary ms-2';
+            debugBtn.textContent = 'View Data (Debug)';
+            debugBtn.addEventListener('click', () => {
+                console.log('Parsed questions:', questions);
+                showAlert('info', 'Question data logged to console. Press F12 to view.');
+            });
+            alertContainer.querySelector('.alert:last-child')?.appendChild(debugBtn);
+        }
         
         // Get file metadata
         const fileMetadata = getFileMetadata(selectedFile);
@@ -176,7 +243,35 @@ async function handleUpload(e) {
         
     } catch (error) {
         console.error('Upload error:', error);
-        showAlert('error', `Error: ${error.message || 'Failed to upload questions'}`);
+        
+        // If error message contains HTML, render it properly
+        if (error.message.includes('<')) {
+            const errorDiv = document.createElement('div');
+            errorDiv.innerHTML = `Error: ${error.message}`;
+            
+            // Clear previous alerts
+            alertContainer.innerHTML = '';
+            
+            // Create new alert container
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-danger alert-dismissible fade show';
+            alert.role = 'alert';
+            
+            // Add the error content
+            alert.appendChild(errorDiv);
+            
+            // Add close button
+            const closeBtn = document.createElement('button');
+            closeBtn.type = 'button';
+            closeBtn.className = 'btn-close';
+            closeBtn.setAttribute('data-bs-dismiss', 'alert');
+            closeBtn.setAttribute('aria-label', 'Close');
+            alert.appendChild(closeBtn);
+            
+            alertContainer.appendChild(alert);
+        } else {
+            showAlert('error', `Error: ${error.message || 'Failed to upload questions'}`);
+        }
         
         // Reset progress
         progressBar.style.display = 'none';
@@ -221,17 +316,99 @@ function parseFileContent(content, filename) {
             throw new Error('Unsupported file format. Please use JSON or JSONL format.');
         }
         
-        // Validate questions basic structure
-        questions.forEach((q, index) => {
-            if (!q.question) {
-                throw new Error(`Question at index ${index} is missing the 'question' field.`);
+        console.log("First question sample:", JSON.stringify(questions[0], null, 2));
+        
+        // Validate and normalize questions
+        questions = questions.map((q, index) => {
+            // Create a normalized copy
+            const normalizedQ = {...q};
+            
+            // Check required fields
+            if (!normalizedQ.question) {
+                throw new Error(`Question at index ${index} is missing the 'question' field. Sample: ${JSON.stringify(q).substring(0, 100)}...`);
             }
-            if (!q.options || !Array.isArray(q.options)) {
-                throw new Error(`Question at index ${index} is missing or has invalid 'options' field.`);
+            
+            // Handle options field - could be an array, string, or object with option keys
+            if (normalizedQ.options) {
+                // If options is a string, try to parse it as JSON
+                if (typeof normalizedQ.options === 'string') {
+                    try {
+                        normalizedQ.options = JSON.parse(normalizedQ.options);
+                    } catch (e) {
+                        // If it can't be parsed, split by line breaks or commas
+                        normalizedQ.options = normalizedQ.options.split(/[\n,]/).map(o => o.trim()).filter(o => o);
+                    }
+                }
+                
+                // If it's an object, convert to array
+                if (!Array.isArray(normalizedQ.options) && typeof normalizedQ.options === 'object') {
+                    normalizedQ.options = Object.values(normalizedQ.options);
+                }
+            } 
+            // If no options field but has numbered fields (option1, option2, etc.)
+            else if (!normalizedQ.options) {
+                const optionFields = [];
+                // Look for fields like option1, option2, option_1, etc.
+                for (const key in normalizedQ) {
+                    if (key.match(/^option[_]?(\d+)$/) || key.match(/^(\d+)$/)) {
+                        optionFields.push({
+                            key: key,
+                            value: normalizedQ[key]
+                        });
+                        delete normalizedQ[key]; // Remove the original field
+                    }
+                }
+                
+                if (optionFields.length > 0) {
+                    // Sort by option number
+                    optionFields.sort((a, b) => {
+                        const numA = parseInt(a.key.match(/\d+/)[0]);
+                        const numB = parseInt(b.key.match(/\d+/)[0]);
+                        return numA - numB;
+                    });
+                    
+                    normalizedQ.options = optionFields.map(f => f.value);
+                } else {
+                    // Still can't find options
+                    throw new Error(`Question at index ${index} is missing the 'options' field. Available fields: ${Object.keys(q).join(', ')}`);
+                }
             }
-            if (!q.answer) {
-                throw new Error(`Question at index ${index} is missing the 'answer' field.`);
+            
+            // Ensure options is an array
+            if (!Array.isArray(normalizedQ.options)) {
+                throw new Error(`Question at index ${index} has invalid 'options' field. Expected an array but got: ${typeof normalizedQ.options}. Value: ${JSON.stringify(normalizedQ.options).substring(0, 100)}...`);
             }
+            
+            // Remove empty options
+            normalizedQ.options = normalizedQ.options.filter(opt => opt !== null && opt !== undefined && opt !== '');
+            
+            if (normalizedQ.options.length === 0) {
+                throw new Error(`Question at index ${index} has empty 'options' array after normalization.`);
+            }
+            
+            // Check for answer
+            if (!normalizedQ.answer) {
+                // Try to determine answer from answer_idx if possible
+                if (normalizedQ.answer_idx !== undefined && normalizedQ.answer_idx !== null &&
+                    normalizedQ.options[normalizedQ.answer_idx]) {
+                    normalizedQ.answer = normalizedQ.options[normalizedQ.answer_idx];
+                } else {
+                    throw new Error(`Question at index ${index} is missing the 'answer' field and cannot be determined from answer_idx.`);
+                }
+            }
+            
+            // Try to determine answer_idx if missing but answer exists
+            if ((normalizedQ.answer_idx === undefined || normalizedQ.answer_idx === null) && normalizedQ.answer) {
+                const answerIndex = normalizedQ.options.findIndex(
+                    opt => opt === normalizedQ.answer || 
+                           JSON.stringify(opt) === JSON.stringify(normalizedQ.answer)
+                );
+                if (answerIndex !== -1) {
+                    normalizedQ.answer_idx = answerIndex;
+                }
+            }
+            
+            return normalizedQ;
         });
         
         return questions;
@@ -244,7 +421,19 @@ function parseFileContent(content, filename) {
 }
 
 async function uploadQuestions(questions, questionSet, fileMetadata) {
+    // Check if Supabase client is available
+    if (!window.supabaseClient) {
+        console.error("Supabase client is not initialized");
+        throw new Error("Database connection not available. Please refresh the page and try again.");
+    }
+    
     const supabase = window.supabaseClient;
+    
+    // Verify the client has the expected methods
+    if (typeof supabase.from !== 'function') {
+        console.error("Supabase client is missing the 'from' method:", supabase);
+        throw new Error("Invalid database client. Please refresh the page and try again.");
+    }
     
     // Process questions in batches of 100
     const batchSize = 100;
@@ -305,7 +494,9 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
         });
         
         try {
-            const { error } = await supabase.from('questions').insert(processedBatch);
+            console.log(`Uploading batch ${i+1}-${i+Math.min(batch.length, batchSize)} (${processedBatch.length} questions)`);
+            
+            const { data, error } = await supabase.from('questions').insert(processedBatch);
             
             if (error) {
                 throw error;
