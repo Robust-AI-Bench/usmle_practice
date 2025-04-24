@@ -18,6 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     console.log("Supabase client verified successfully");
+    
+    // Ensure we have an authenticated client by calling our helper
+    // This makes sure we have a valid session before uploading
+    if (window.utils && window.utils.ensureAuthenticatedClient) {
+        window.utils.ensureAuthenticatedClient()
+            .then(() => {
+                console.log("Authentication verified successfully");
+            })
+            .catch(error => {
+                console.error("Authentication verification failed:", error);
+                showInitAlert("Failed to verify authentication. Please refresh and try again.");
+            });
+    }
 });
 
 // Display initial alert for critical errors
@@ -412,21 +425,7 @@ function parseFileContent(content, filename) {
                 }
             }
             
-            // IMPORTANT: Always preserve letter key format (A, B, C, D) for options
-            // Check if options is an object with letter keys (A, B, C, D, etc.)
-            if (!Array.isArray(normalizedQ.options) && typeof normalizedQ.options === 'object') {
-                const keys = Object.keys(normalizedQ.options);
-                const hasLetterKeys = keys.some(key => /^[A-Z]$/.test(key));
-                
-                if (hasLetterKeys) {
-                    // Keep the object structure intact for options with letter keys
-                    // Do not convert to array - this preserves the A, B, C, D mapping
-                    console.log(`Preserving letter keys for options in question at ${lineInfo}`);
-                } else {
-                    // Only convert to array if not using letter keys
-                    normalizedQ.options = Object.values(normalizedQ.options);
-                }
-            }
+            
             
             // Validate and normalize answer_idx
             if (normalizedQ.answer_idx !== undefined) {
@@ -524,11 +523,23 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
         };
     }
 
-    // Ensure Supabase client is available
-    if (!window.supabaseClient) {
+    // Get authenticated Supabase client using our utility function
+    let supabaseClient;
+    try {
+        if (window.utils && window.utils.ensureAuthenticatedClient) {
+            supabaseClient = await window.utils.ensureAuthenticatedClient();
+        } else {
+            // Fallback if utils is not available
+            if (!window.supabaseClient) {
+                throw new Error("Database connection not available.");
+            }
+            supabaseClient = window.supabaseClient;
+        }
+    } catch (error) {
+        console.error("Authentication error:", error);
         return {
             success: false,
-            message: "Database connection not available."
+            message: "Authentication failed: " + error.message
         };
     }
 
@@ -578,20 +589,24 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
                     'options',
                     'answer',
                     'answer_idx',
-                    'explanation',
-                    'category',
-                    'difficulty',
-                    'tags',
-                    'source',
                     'meta_info',
-                    'other'
+                    'question_hash',
+                    'other'  // 'other' is directly mapped to the database column
                 ];
                 
                 // Identify unmapped fields for overflow
                 const overflowFields = {};
+                
+                // Add all fields not directly mapped to database columns to overflow
                 Object.keys(q).forEach(key => {
                     // Skip fields that will be explicitly mapped to database columns
-                    if (!knownMappedFields.includes(key) && key !== '_lineNumber' && key !== '_numeric_answer_idx') {
+                    // and internal fields used for processing
+                    if (!knownMappedFields.includes(key) && 
+                        key !== '_lineNumber' && 
+                        key !== '_numeric_answer_idx' &&
+                        key !== 'question_set') {  // question_set is added separately
+                        
+                        // Add the field to overflow, including explanation, category, etc.
                         overflowFields[key] = q[key];
                     }
                 });
@@ -605,18 +620,18 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
                     answer_idx: q.answer_idx,
                     question_hash: questionHash,
                     meta_info: q.meta_info || null,
-                    explanation: q.explanation || null,
-                    category: q.category || null,
-                    difficulty: q.difficulty || null,
-                    tags: q.tags ? (Array.isArray(q.tags) ? q.tags.join(',') : q.tags) : null,
-                    source: q.source || null,
                     answer_count: 0,
                     extraJ: JSON.stringify(fileMetadata) // Add file metadata to extraJ column
                 };
                 
-                // Add 'other' column if there are additional fields
+                // Add 'other' column if present in the source file
+                if (q.other !== undefined) {
+                    questionObj.other = typeof q.other === 'string' ? q.other : JSON.stringify(q.other);
+                }
+                
+                // Add 'overflow' column if there are unmapped fields
                 if (Object.keys(overflowFields).length > 0) {
-                    questionObj.other = JSON.stringify(overflowFields);
+                    questionObj.overflow = JSON.stringify(overflowFields);
                 }
                 
                 processedBatch.push(questionObj);
@@ -632,7 +647,7 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
         
         try {
             // Use Supabase client to insert questions directly
-            const { data, error } = await window.supabaseClient
+            const { data, error } = await supabaseClient
                 .from('questions')
                 .insert(processedBatch);
                 
@@ -649,8 +664,10 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
             uploadProgress.textContent = `${progressPercent}%`;
             
         } catch (error) {
+            console.error("Database error:", error);
+            
             // Check if error is for duplicate questions
-            if (error.code === '23505' || error.message?.includes('duplicate')) {
+            if (error.code === '23505' || (error.message && error.message.includes('duplicate'))) {
                 // Extract the duplicate questions and mark them as skipped
                 for (const q of processedBatch) {
                     results.skipped++;
@@ -668,6 +685,20 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
     results.message = results.success 
         ? `Successfully processed ${results.processed} questions (${results.skipped} duplicates skipped, ${results.failed} failed).`
         : `Failed to upload questions: ${results.errors.length} errors occurred.`;
+    
+    // If successful, call the uploadComplete function
+    if (results.success) {
+        uploadComplete(results.processed);
+    } else {
+        // Show error alert
+        showAlert('error', results.message);
+        
+        // Reset progress
+        progressBar.style.display = 'none';
+        uploadProgress.style.width = '0%';
+        uploadProgress.textContent = '0%';
+        uploadButton.disabled = false;
+    }
     
     return results;
 }

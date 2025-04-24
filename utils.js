@@ -11,6 +11,79 @@ function formatFileSize(bytes) {
 }
 
 /**
+ * Ensures the Supabase client is properly authenticated
+ * @returns {Object} The authenticated Supabase client or throws an error
+ */
+function getAuthenticatedSupabaseClient() {
+  // Check if we're in a browser environment
+  if (typeof window !== 'undefined') {
+    // Make sure client exists
+    if (!window.supabaseClient) {
+      throw new Error("Supabase client is not initialized");
+    }
+
+    // If the supabase client already exists, return it
+    return window.supabaseClient;
+  } 
+  // Node.js environment
+  else if (typeof require !== 'undefined') {
+    const { getSupabaseClient } = require('./db_utils');
+    return getSupabaseClient();
+  }
+
+  throw new Error('Unable to initialize Supabase client - unknown environment');
+}
+
+/**
+ * Ensures the Supabase client is authenticated and ready for data operations
+ * @returns {Promise<Object>} The authenticated Supabase client
+ */
+async function ensureAuthenticatedClient() {
+  // Check if we're in a browser environment
+  if (typeof window !== 'undefined') {
+    // Get the supabaseClient from window
+    const client = window.supabaseClient;
+    
+    if (!client) {
+      throw new Error("Supabase client not initialized");
+    }
+    
+    try {
+      // Check for an existing session
+      const { data, error } = await client.auth.getSession();
+      
+      if (error) {
+        console.error("Authentication error:", error.message);
+        throw new Error("Authentication failed: " + error.message);
+      }
+      
+      // If no active session, try anonymous sign-in
+      if (!data.session) {
+        console.log("No active session, attempting anonymous sign-in");
+        const { error: signInError } = await client.auth.signInAnonymously();
+        
+        if (signInError) {
+          console.error("Anonymous sign-in failed:", signInError.message);
+          throw new Error("Failed to sign in: " + signInError.message);
+        }
+      }
+      
+      return client;
+    } catch (err) {
+      console.error("Authentication check failed:", err);
+      throw new Error("Authentication failed: " + err.message);
+    }
+  } 
+  // Node.js environment - use service role key
+  else if (typeof require !== 'undefined') {
+    const { getSupabaseClient } = require('./db_utils');
+    return getSupabaseClient();
+  }
+  
+  throw new Error('Unable to initialize Supabase client - unknown environment');
+}
+
+/**
  * Parse file content based on file format
  * @param {string} content - The file content as string
  * @param {string} filename - The filename to determine format
@@ -204,7 +277,9 @@ if (typeof module !== 'undefined' && module.exports) {
     createQuestionHash,
     normalizeOptions,
     processAnswerIdx,
-    validateRequiredFields
+    validateRequiredFields,
+    getAuthenticatedSupabaseClient,
+    ensureAuthenticatedClient
   };
 } else if (typeof window !== 'undefined') {
   // Browser environment
@@ -214,6 +289,8 @@ if (typeof module !== 'undefined' && module.exports) {
     createQuestionHash,
     normalizeOptions,
     processAnswerIdx,
-    validateRequiredFields
+    validateRequiredFields,
+    getAuthenticatedSupabaseClient,
+    ensureAuthenticatedClient
   };
 } 
