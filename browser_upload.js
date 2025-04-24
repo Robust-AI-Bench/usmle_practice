@@ -544,14 +544,20 @@ function uploadComplete(total) {
     // Show success message
     showAlert('success', `Successfully uploaded ${total} questions! You can now use them in the practice app.`);
     
-    // Reset form for another upload
+    // Store the question set name to preserve it
+    const questionSetValue = questionSetInput.value;
+    
+    // Reset form for another upload but preserve question set name
     setTimeout(() => {
         selectedFile = null;
         fileInfo.style.display = 'none';
-        uploadForm.reset();
+        fileInput.value = ''; // Clear file input but don't reset entire form
         progressBar.style.display = 'none';
         uploadProgress.style.width = '0%';
         uploadProgress.textContent = '0%';
         uploadButton.disabled = true;
+        
+        // Preserve the question set name
+        questionSetInput.value = questionSetValue;
     }, 3000);
 } 
