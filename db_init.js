@@ -42,6 +42,9 @@ CREATE TABLE IF NOT EXISTS questions (
   question_hash TEXT NOT NULL,
   meta_info TEXT,
   answer_count INTEGER DEFAULT 0,
+  extraJ JSONB,
+  other JSONB,
+  overflow JSONB,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
