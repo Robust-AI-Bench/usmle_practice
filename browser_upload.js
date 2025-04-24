@@ -155,15 +155,63 @@ function showAlert(type, message) {
 }
 
 function getFileMetadata(file) {
+    // Get current browser and platform info
+    const browserInfo = {
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        language: navigator.language,
+        screenWidth: window.screen.width,
+        screenHeight: window.screen.height,
+        devicePixelRatio: window.devicePixelRatio || 1
+    };
+    
+    // Get user information
+    const userElement = document.getElementById('welcomeUser');
+    const userInfo = {};
+    
+    if (userElement) {
+        // Extract email if present
+        const emailMatch = userElement.innerText.match(/Email: ([^\s|]+)/);
+        if (emailMatch && emailMatch[1]) {
+            userInfo.email = emailMatch[1];
+        }
+        
+        // Extract name if present
+        const nameMatch = userElement.innerText.match(/Name: ([^|]+)(?:\||$)/);
+        if (nameMatch && nameMatch[1]) {
+            userInfo.name = nameMatch[1].trim();
+        }
+        
+        // Extract ID if present
+        const idMatch = userElement.innerText.match(/ID: ([a-f0-9-]+)/i);
+        if (idMatch && idMatch[1]) {
+            userInfo.id = idMatch[1];
+        }
+    }
+    
+    // Create comprehensive metadata object
     return {
+        // File information
         filename: file.name,
         filesize: file.size,
         filetype: file.type,
         last_modified: new Date(file.lastModified).toISOString(),
+        
+        // Upload context
         upload_time: new Date().toISOString(),
+        upload_method: 'browser',
         uploader_id: localStorage.getItem('userId') || 'anonymous',
-        uploader_email: document.getElementById('welcomeUser')?.innerText?.match(/Email: ([^\s|]+)/)?.pop() || null,
-        uploader_name: document.getElementById('welcomeUser')?.innerText?.match(/Name: ([^>]+)$/)?.pop() || null
+        
+        // User information
+        user_info: userInfo,
+        
+        // Browser/platform information
+        browser_info: browserInfo,
+        
+        // Source tracking
+        source: 'web_upload',
+        version: '1.0',
+        origin_url: window.location.href
     };
 }
 
@@ -298,246 +346,319 @@ function readFileContent(file) {
 }
 
 function parseFileContent(content, filename) {
-    const extension = filename.split('.').pop().toLowerCase();
-    let questions = [];
-    
+    let parsedQuestions = [];
+    const format = filename.split('.').pop().toLowerCase();
+
     try {
-        if (extension === 'jsonl') {
-            // Parse JSONL (one JSON object per line)
-            questions = content
-                .split('\n')
-                .filter(line => line.trim())
-                .map(line => JSON.parse(line));
-        } else if (extension === 'json') {
-            // Parse JSON (single array or object)
+        if (format === 'jsonl') {
+            // Process JSONL format (one JSON object per line)
+            const lines = content.split(/\r?\n/);
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue; // Skip empty lines
+                
+                try {
+                    const questionObj = JSON.parse(line);
+                    // Add line number for error reporting
+                    questionObj._lineNumber = i + 1;
+                    parsedQuestions.push(questionObj);
+                } catch (lineError) {
+                    console.error(`Error parsing JSON at line ${i + 1}:`, lineError, `Line content: ${line}`);
+                    throw new Error(`Invalid JSON at line ${i + 1}: ${lineError.message}`);
+                }
+            }
+        } else if (format === 'json') {
+            // Process JSON format (array of question objects)
             const parsed = JSON.parse(content);
-            questions = Array.isArray(parsed) ? parsed : [parsed];
+            
+            if (Array.isArray(parsed)) {
+                parsedQuestions = parsed;
+            } else if (parsed && typeof parsed === 'object') {
+                // Handle single question object
+                parsedQuestions = [parsed];
+            } else {
+                throw new Error("JSON content must be an array of question objects or a single question object");
+            }
         } else {
-            throw new Error('Unsupported file format. Please use JSON or JSONL format.');
+            throw new Error(`Unsupported format: ${format}`);
         }
         
-        console.log("First question sample:", JSON.stringify(questions[0], null, 2));
+        // Normalize and validate the parsed questions
+        const normalizedQuestions = [];
+        const requiredFields = ['question', 'options', 'answer_idx', 'answer'];
         
-        // Validate and normalize questions
-        questions = questions.map((q, index) => {
-            // Create a normalized copy
-            const normalizedQ = {...q};
+        for (let i = 0; i < parsedQuestions.length; i++) {
+            const q = parsedQuestions[i];
+            const lineInfo = q._lineNumber ? `line ${q._lineNumber}` : `index ${i}`;
             
-            // Check required fields
-            if (!normalizedQ.question) {
-                throw new Error(`Question at index ${index} is missing the 'question' field. Sample: ${JSON.stringify(q).substring(0, 100)}...`);
+            // Validate required fields
+            const missingFields = requiredFields.filter(field => q[field] === undefined);
+            if (missingFields.length > 0) {
+                throw new Error(`Question at ${lineInfo} is missing required fields: ${missingFields.join(', ')}`);
             }
             
-            // Handle options field - could be an array, string, or object with option keys
-            if (normalizedQ.options) {
-                // If options is a string, try to parse it as JSON
-                if (typeof normalizedQ.options === 'string') {
-                    try {
-                        normalizedQ.options = JSON.parse(normalizedQ.options);
-                    } catch (e) {
-                        // If it can't be parsed, split by line breaks or commas
-                        normalizedQ.options = normalizedQ.options.split(/[\n,]/).map(o => o.trim()).filter(o => o);
-                    }
+            // Create a normalized copy of the question object
+            const normalizedQ = { ...q };
+            
+            // Ensure options is properly handled based on its format
+            if (typeof normalizedQ.options === 'string') {
+                try {
+                    // Try to parse options if it's a JSON string
+                    normalizedQ.options = JSON.parse(normalizedQ.options);
+                } catch (e) {
+                    // If it's not valid JSON, leave it as a string
+                    console.warn(`Options for question at ${lineInfo} couldn't be parsed as JSON. Keeping as string.`);
                 }
+            }
+            
+            // IMPORTANT: Always preserve letter key format (A, B, C, D) for options
+            // Check if options is an object with letter keys (A, B, C, D, etc.)
+            if (!Array.isArray(normalizedQ.options) && typeof normalizedQ.options === 'object') {
+                const keys = Object.keys(normalizedQ.options);
+                const hasLetterKeys = keys.some(key => /^[A-Z]$/.test(key));
                 
-                // If it's an object, convert to array
-                if (!Array.isArray(normalizedQ.options) && typeof normalizedQ.options === 'object') {
+                if (hasLetterKeys) {
+                    // Keep the object structure intact for options with letter keys
+                    // Do not convert to array - this preserves the A, B, C, D mapping
+                    console.log(`Preserving letter keys for options in question at ${lineInfo}`);
+                } else {
+                    // Only convert to array if not using letter keys
                     normalizedQ.options = Object.values(normalizedQ.options);
                 }
-            } 
-            // If no options field but has numbered fields (option1, option2, etc.)
-            else if (!normalizedQ.options) {
-                const optionFields = [];
-                // Look for fields like option1, option2, option_1, etc.
-                for (const key in normalizedQ) {
-                    if (key.match(/^option[_]?(\d+)$/) || key.match(/^(\d+)$/)) {
-                        optionFields.push({
-                            key: key,
-                            value: normalizedQ[key]
-                        });
-                        delete normalizedQ[key]; // Remove the original field
+            }
+            
+            // Validate and normalize answer_idx
+            if (normalizedQ.answer_idx !== undefined) {
+                // Handle letter-based answer_idx (A, B, C, etc.)
+                if (typeof normalizedQ.answer_idx === 'string' && /^[A-Z]$/.test(normalizedQ.answer_idx)) {
+                    // For letter-based answer_idx, ensure the options structure supports it
+                    if (typeof normalizedQ.options === 'object' && 
+                        !Array.isArray(normalizedQ.options)) {
+                        // Check if the letter key exists in options
+                        if (normalizedQ.options[normalizedQ.answer_idx] === undefined) {
+                            throw new Error(`Question at ${lineInfo} has answer_idx "${normalizedQ.answer_idx}" but this key doesn't exist in options`);
+                        }
+                    } else if (Array.isArray(normalizedQ.options)) {
+                        // Convert letter to index if options is an array
+                        const letterIndex = normalizedQ.answer_idx.charCodeAt(0) - 'A'.charCodeAt(0);
+                        if (letterIndex < 0 || letterIndex >= normalizedQ.options.length) {
+                            throw new Error(`Question at ${lineInfo} has letter answer_idx "${normalizedQ.answer_idx}" but options array has length ${normalizedQ.options.length}`);
+                        }
+                        // Keep the letter answer_idx but add a numeric representation for validation
+                        normalizedQ._numeric_answer_idx = letterIndex;
+                    }
+                } else if (typeof normalizedQ.answer_idx === 'string') {
+                    // Try to convert string number to actual number
+                    const numericIdx = parseInt(normalizedQ.answer_idx, 10);
+                    if (!isNaN(numericIdx)) {
+                        normalizedQ.answer_idx = numericIdx;
+                    } else {
+                        throw new Error(`Question at ${lineInfo} has invalid answer_idx: "${normalizedQ.answer_idx}"`);
                     }
                 }
                 
-                if (optionFields.length > 0) {
-                    // Sort by option number
-                    optionFields.sort((a, b) => {
-                        const numA = parseInt(a.key.match(/\d+/)[0]);
-                        const numB = parseInt(b.key.match(/\d+/)[0]);
-                        return numA - numB;
-                    });
-                    
-                    normalizedQ.options = optionFields.map(f => f.value);
-                } else {
-                    // Still can't find options
-                    throw new Error(`Question at index ${index} is missing the 'options' field. Available fields: ${Object.keys(q).join(', ')}`);
+                // For numeric answer_idx, validate it's within bounds of array options
+                if (typeof normalizedQ.answer_idx === 'number') {
+                    if (Array.isArray(normalizedQ.options)) {
+                        if (normalizedQ.answer_idx < 0 || normalizedQ.answer_idx >= normalizedQ.options.length) {
+                            throw new Error(`Question at ${lineInfo} has answer_idx ${normalizedQ.answer_idx} but options array has length ${normalizedQ.options.length}`);
+                        }
+                    } else if (typeof normalizedQ.options === 'object') {
+                        // If options is an object with letter keys but answer_idx is numeric, 
+                        // we should convert answer_idx to a letter key
+                        const keys = Object.keys(normalizedQ.options);
+                        const letterKeys = keys.filter(key => /^[A-Z]$/.test(key)).sort();
+                        
+                        if (letterKeys.length > 0 && normalizedQ.answer_idx < letterKeys.length) {
+                            // Store the numeric index but convert to letter for consistency
+                            normalizedQ._numeric_answer_idx = normalizedQ.answer_idx;
+                            normalizedQ.answer_idx = letterKeys[normalizedQ.answer_idx];
+                            console.warn(`Question at ${lineInfo}: Converting numeric answer_idx ${normalizedQ._numeric_answer_idx} to letter key "${normalizedQ.answer_idx}"`);
+                        } else {
+                            throw new Error(`Question at ${lineInfo} has numeric answer_idx ${normalizedQ.answer_idx} but options is an object without enough letter keys`);
+                        }
+                    }
                 }
             }
             
-            // Ensure options is an array
-            if (!Array.isArray(normalizedQ.options)) {
-                throw new Error(`Question at index ${index} has invalid 'options' field. Expected an array but got: ${typeof normalizedQ.options}. Value: ${JSON.stringify(normalizedQ.options).substring(0, 100)}...`);
-            }
-            
-            // Remove empty options
-            normalizedQ.options = normalizedQ.options.filter(opt => opt !== null && opt !== undefined && opt !== '');
-            
-            if (normalizedQ.options.length === 0) {
-                throw new Error(`Question at index ${index} has empty 'options' array after normalization.`);
-            }
-            
-            // Check for answer
-            if (!normalizedQ.answer) {
-                // Try to determine answer from answer_idx if possible
-                if (normalizedQ.answer_idx !== undefined && normalizedQ.answer_idx !== null &&
-                    normalizedQ.options[normalizedQ.answer_idx]) {
-                    normalizedQ.answer = normalizedQ.options[normalizedQ.answer_idx];
-                } else {
-                    throw new Error(`Question at index ${index} is missing the 'answer' field and cannot be determined from answer_idx.`);
+            // Validate answer against answer_idx
+            if (normalizedQ.answer && normalizedQ.answer_idx !== undefined) {
+                let derivedAnswer;
+                
+                // Get the expected answer based on answer_idx
+                if (typeof normalizedQ.answer_idx === 'string' && /^[A-Z]$/.test(normalizedQ.answer_idx) && 
+                    typeof normalizedQ.options === 'object' && !Array.isArray(normalizedQ.options)) {
+                    // Letter index with object options
+                    derivedAnswer = normalizedQ.options[normalizedQ.answer_idx];
+                } else if (typeof normalizedQ.answer_idx === 'number' && Array.isArray(normalizedQ.options)) {
+                    // Numeric index with array options
+                    derivedAnswer = normalizedQ.options[normalizedQ.answer_idx];
+                } else if (normalizedQ._numeric_answer_idx !== undefined && Array.isArray(normalizedQ.options)) {
+                    // Using stored numeric index
+                    derivedAnswer = normalizedQ.options[normalizedQ._numeric_answer_idx];
+                }
+                
+                // Check if answer matches the option at answer_idx
+                if (derivedAnswer !== undefined && normalizedQ.answer !== derivedAnswer) {
+                    console.warn(`Question at ${lineInfo}: answer "${normalizedQ.answer}" doesn't match the option at answer_idx: "${derivedAnswer}"`);
                 }
             }
             
-            // Try to determine answer_idx if missing but answer exists
-            if ((normalizedQ.answer_idx === undefined || normalizedQ.answer_idx === null) && normalizedQ.answer) {
-                const answerIndex = normalizedQ.options.findIndex(
-                    opt => opt === normalizedQ.answer || 
-                           JSON.stringify(opt) === JSON.stringify(normalizedQ.answer)
-                );
-                if (answerIndex !== -1) {
-                    normalizedQ.answer_idx = answerIndex;
-                }
-            }
-            
-            return normalizedQ;
-        });
-        
-        return questions;
-    } catch (error) {
-        if (error.name === 'SyntaxError') {
-            throw new Error('Invalid JSON format. Please check your file.');
+            // Add the normalized question to the result array
+            normalizedQuestions.push(normalizedQ);
         }
+        
+        return normalizedQuestions;
+    } catch (error) {
+        console.error("Error parsing file content:", error);
         throw error;
     }
 }
 
 async function uploadQuestions(questions, questionSet, fileMetadata) {
-    // Check if Supabase client is available
-    if (!window.supabaseClient) {
-        console.error("Supabase client is not initialized");
-        throw new Error("Database connection not available. Please refresh the page and try again.");
+    if (!questions || !Array.isArray(questions) || questions.length === 0) {
+        return {
+            success: false,
+            message: "No valid questions provided for upload."
+        };
     }
-    
-    const supabase = window.supabaseClient;
-    
-    // Verify the client has the expected methods
-    if (typeof supabase.from !== 'function') {
-        console.error("Supabase client is missing the 'from' method:", supabase);
-        throw new Error("Invalid database client. Please refresh the page and try again.");
-    }
-    
-    // Process questions in batches of 100
-    const batchSize = 100;
-    let processed = 0;
+
+    const results = {
+        success: true,
+        total: questions.length,
+        processed: 0,
+        skipped: 0,
+        failed: 0,
+        errors: [],
+        duplicates: []
+    };
+
+    // Group questions into batches to avoid sending too many at once
+    const batchSize = 25;
+    const batches = [];
     
     for (let i = 0; i < questions.length; i += batchSize) {
-        const batch = questions.slice(i, i + batchSize);
-        const processedBatch = batch.map(q => {
-            // Create SHA-256 hash of the question text to detect duplicates
-            const questionData = q.question + JSON.stringify(q.options) + q.answer;
-            const questionHash = createSHA256Hash(questionData);
-            
-            // Define known fields that we explicitly map to database columns
-            const knownMappedFields = [
-                'question',
-                'options',
-                'answer',
-                'answer_idx',
-                'meta_info',
-                'other'
-            ];
-            
-            // Identify unmapped fields for overflow
-            const overflowFields = {};
-            Object.keys(q).forEach(key => {
-                // Skip fields that will be explicitly mapped to database columns
-                if (!knownMappedFields.includes(key)) {
-                    overflowFields[key] = q[key];
+        batches.push(questions.slice(i, i + batchSize));
+    }
+
+    // Process each batch
+    for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+        const batch = batches[batchIndex];
+        const batchData = [];
+        
+        // Process each question in the batch
+        for (const q of batch) {
+            try {
+                // Validate required fields
+                const requiredFields = ['question', 'options', 'answer_idx', 'answer'];
+                const missingFields = requiredFields.filter(field => q[field] === undefined);
+                
+                if (missingFields.length > 0) {
+                    results.failed++;
+                    results.errors.push(`Question missing required fields: ${missingFields.join(', ')}`);
+                    continue;
                 }
-            });
-            
-            // Create the base object
-            const questionObj = {
-                question_set: questionSet,
-                question: q.question,
-                options: typeof q.options === 'string' ? q.options : JSON.stringify(q.options),
-                answer: q.answer,
-                answer_idx: q.answer_idx,
-                question_hash: questionHash,
-                meta_info: q.meta_info || null,
-                answer_count: 0,
-                extraJ: JSON.stringify(fileMetadata) // Add file metadata to extraJ column
-            };
-            
-            // Add 'other' column if present in input
-            if (q.other) {
-                questionObj.other = typeof q.other === 'string' 
-                    ? q.other 
-                    : JSON.stringify(q.other);
+                
+                // Create a hash of the question to check for duplicates
+                const questionHash = await createQuestionHash(q.question);
+                
+                // Prepare the question data for upload
+                const questionData = {
+                    hash: questionHash,
+                    question: q.question,
+                    // Preserve the original options format (object or array)
+                    options: typeof q.options === 'string' ? q.options : JSON.stringify(q.options),
+                    answer_idx: q.answer_idx,
+                    answer: q.answer,
+                    // Map known fields to database columns
+                    explanation: q.explanation || null,
+                    category: q.category || null,
+                    difficulty: q.difficulty || null,
+                    tags: q.tags ? (Array.isArray(q.tags) ? q.tags.join(',') : q.tags) : null,
+                    source: q.source || null
+                };
+                
+                // Store any additional fields in the "other" JSON column
+                const knownFields = ['question', 'options', 'answer_idx', 'answer', 'explanation', 
+                                     'category', 'difficulty', 'tags', 'source'];
+                const otherFields = {};
+                let hasOtherFields = false;
+                
+                // Collect any extra fields not in our known list
+                for (const key in q) {
+                    if (!knownFields.includes(key) && key !== '_lineNumber' && key !== '_numeric_answer_idx') {
+                        otherFields[key] = q[key];
+                        hasOtherFields = true;
+                    }
+                }
+                
+                if (hasOtherFields) {
+                    questionData.other = JSON.stringify(otherFields);
+                }
+                
+                batchData.push(questionData);
+            } catch (error) {
+                results.failed++;
+                results.errors.push(`Failed to process question: ${error.message}`);
             }
-            
-            // Add overflow data if there are unmapped fields
-            if (Object.keys(overflowFields).length > 0) {
-                questionObj.overflow = JSON.stringify(overflowFields);
-            }
-            
-            return questionObj;
-        });
+        }
+        
+        if (batchData.length === 0) {
+            continue; // Skip empty batches
+        }
         
         try {
-            console.log(`Uploading batch ${i+1}-${i+Math.min(batch.length, batchSize)} (${processedBatch.length} questions)`);
+            // Send the batch to the server
+            const response = await fetch('/api/questions/upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ questions: batchData })
+            });
             
-            const { data, error } = await supabase.from('questions').insert(processedBatch);
+            const batchResult = await response.json();
             
-            if (error) {
-                throw error;
+            if (!batchResult.success) {
+                throw new Error(batchResult.message || 'Unknown server error');
             }
             
-            processed += batch.length;
+            // Update results with batch information
+            results.processed += batchResult.processed || 0;
+            results.skipped += batchResult.skipped || 0;
+            results.failed += batchResult.failed || 0;
             
-            // Update progress
-            const percentage = Math.round((processed / questions.length) * 100);
-            uploadProgress.style.width = `${percentage}%`;
-            uploadProgress.textContent = `${percentage}%`;
-            uploadProgress.setAttribute('aria-valuenow', percentage);
+            if (batchResult.duplicates && batchResult.duplicates.length > 0) {
+                results.duplicates = results.duplicates.concat(batchResult.duplicates);
+            }
             
-            // Update status
-            showAlert('info', `Processed ${processed}/${questions.length} questions...`);
-            
-            // If all questions are processed
-            if (processed >= questions.length) {
-                uploadComplete(processed);
+            if (batchResult.errors && batchResult.errors.length > 0) {
+                results.errors = results.errors.concat(batchResult.errors);
             }
         } catch (error) {
-            console.error(`Error uploading batch (${i+1}-${i+Math.min(batch.length, batchSize)}):`, error);
-            throw new Error(`Failed to upload questions: ${error.message || 'Database error'}`);
+            results.failed += batch.length;
+            results.errors.push(`Batch ${batchIndex + 1} failed: ${error.message}`);
         }
     }
+    
+    // Determine overall success based on processed vs failed
+    results.success = results.processed > 0 && results.failed < questions.length;
+    results.message = results.success 
+        ? `Successfully processed ${results.processed} questions (${results.skipped} duplicates skipped, ${results.failed} failed).`
+        : `Failed to upload questions: ${results.errors.length} errors occurred.`;
+    
+    return results;
 }
 
-function createSHA256Hash(data) {
-    // Web Crypto API for creating SHA-256 hash
-    // Note: This is async in real implementation, we're using a simple alternative here
-    let hash = 0;
-    if (data.length === 0) return hash.toString(16);
-    
-    for (let i = 0; i < data.length; i++) {
-        const char = data.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    
-    // Convert to hex string
-    return (hash >>> 0).toString(16).padStart(8, '0');
+// Helper function to create a hash of a question for duplicate detection
+async function createQuestionHash(questionText) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(questionText.trim().toLowerCase());
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
 }
 
 function uploadComplete(total) {
