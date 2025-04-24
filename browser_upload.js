@@ -49,6 +49,7 @@ function showInitAlert(message) {
 // DOM Elements
 const uploadForm = document.getElementById('uploadForm');
 const questionSetInput = document.getElementById('questionSet');
+const fileDescriptionInput = document.getElementById('fileDescription');
 const fileInput = document.getElementById('fileInput');
 const browseButton = document.getElementById('browseButton');
 const dropArea = document.getElementById('drop-area');
@@ -60,11 +61,22 @@ const progressBar = document.querySelector('.progress');
 const uploadProgress = document.getElementById('uploadProgress');
 const alertContainer = document.getElementById('alert-container');
 
-// File object
+// File object and content
 let selectedFile = null;
+let fileContent = null;
+let fileContentHash = null;
+let fileWarningContainer = null;
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
+    // Create warning container
+    fileWarningContainer = document.createElement('div');
+    fileWarningContainer.className = 'mt-3';
+    fileWarningContainer.style.display = 'none';
+    fileWarningContainer.style.color = '#dc3545'; // Bootstrap danger red
+    // Insert after fileInfo
+    fileInfo.after(fileWarningContainer);
+    
     // File selection via button
     browseButton.addEventListener('click', () => {
         fileInput.click();
@@ -121,7 +133,7 @@ function handleFileSelect(e) {
     }
 }
 
-function handleFileSelection(file) {
+async function handleFileSelection(file) {
     // Validate file type
     const fileExt = file.name.split('.').pop().toLowerCase();
     if (fileExt !== 'json' && fileExt !== 'jsonl') {
@@ -136,7 +148,23 @@ function handleFileSelection(file) {
     fileSize.textContent = formatFileSize(file.size);
     uploadButton.disabled = false;
     
-    showAlert('info', 'File selected. Enter a question set name and click "Upload Questions" to begin.');
+    // Clear previous warning
+    fileWarningContainer.style.display = 'none';
+    fileWarningContainer.innerHTML = '';
+    
+    try {
+        // Read file content and calculate hash
+        fileContent = await readFileContent(file);
+        fileContentHash = await createFileContentHash(fileContent);
+        
+        // Check if this file has been uploaded before
+        await checkForPreviousUpload(fileContentHash);
+        
+        showAlert('info', 'File selected. Enter a question set name and click "Upload Questions" to begin.');
+    } catch (error) {
+        console.error('Error processing file:', error);
+        showAlert('error', `Error processing file: ${error.message}`);
+    }
 }
 
 function formatFileSize(bytes) {
@@ -250,7 +278,10 @@ async function handleUpload(e) {
         uploadButton.disabled = true;
         
         // Read file content
-        const fileContent = await readFileContent(selectedFile);
+        fileContent = await readFileContent(selectedFile);
+        
+        // Create hash of file content for logging
+        fileContentHash = await createFileContentHash(fileContent);
         
         // Show initial alert
         showAlert('info', 'Parsing file content...');
@@ -281,6 +312,9 @@ async function handleUpload(e) {
         if (!questions || questions.length === 0) {
             throw new Error('No valid questions found in the file.');
         }
+        
+        // Log file to file_log table before processing questions
+        await logFileUpload(questionSet);
         
         showAlert('info', `Found ${questions.length} questions to upload.`);
         
@@ -621,7 +655,8 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
                     question_hash: questionHash,
                     meta_info: q.meta_info || null,
                     answer_count: 0,
-                    extraJ: JSON.stringify(fileMetadata) // Add file metadata to extraJ column
+                    extraJ: JSON.stringify(fileMetadata), // Add file metadata to extraJ column
+                    src_file_content_hash: fileContentHash  // Add file content hash
                 };
                 
                 // Add 'other' column if present in the source file
@@ -733,4 +768,149 @@ function uploadComplete(total) {
         // Preserve the question set name
         questionSetInput.value = questionSetValue;
     }, 3000);
+}
+
+/**
+ * Create a hash of the file content
+ * @param {string} content - The file content to hash
+ * @returns {Promise<string>} SHA-256 hash in hex format
+ */
+async function createFileContentHash(content) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(content);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
+/**
+ * Log file upload to file_log table
+ * @param {string} questionSet - The question set name
+ * @returns {Promise<void>}
+ */
+async function logFileUpload(questionSet) {
+    // Get the description from the textarea
+    const description = fileDescriptionInput.value.trim();
+    
+    // Get authenticated Supabase client
+    let supabaseClient;
+    try {
+        if (window.utils && window.utils.ensureAuthenticatedClient) {
+            supabaseClient = await window.utils.ensureAuthenticatedClient();
+        } else {
+            if (!window.supabaseClient) {
+                throw new Error("Database connection not available.");
+            }
+            supabaseClient = window.supabaseClient;
+        }
+    } catch (error) {
+        console.error("Authentication error:", error);
+        throw new Error("Authentication failed: " + error.message);
+    }
+    
+    // Prepare the file log entry
+    const fileLogEntry = {
+        question_set: questionSet,
+        description: description || null,
+        filename: selectedFile.name,
+        content_hash: fileContentHash,
+        ftype: selectedFile.name.split('.').pop().toLowerCase()
+    };
+    
+    try {
+        // Insert log entry
+        const { data, error } = await supabaseClient
+            .from('file_log')
+            .insert(fileLogEntry);
+            
+        if (error) {
+            console.error("Error logging file:", error);
+            throw new Error("Failed to log file: " + error.message);
+        }
+        
+        console.log("File logged successfully:", data);
+        return data;
+    } catch (error) {
+        console.error("Error logging file:", error);
+        throw new Error("Failed to log file: " + error.message);
+    }
+}
+
+/**
+ * Check if a file with the same content hash has been uploaded before
+ * @param {string} contentHash - The content hash to check
+ */
+async function checkForPreviousUpload(contentHash) {
+    if (!contentHash) return;
+    
+    try {
+        // Get authenticated Supabase client
+        let supabaseClient;
+        if (window.utils && window.utils.getAuthenticatedSupabaseClient) {
+            supabaseClient = window.utils.getAuthenticatedSupabaseClient();
+        } else {
+            if (!window.supabaseClient) {
+                throw new Error("Database connection not available.");
+            }
+            supabaseClient = window.supabaseClient;
+        }
+        
+        // Query the file_log table for the content hash
+        const { data, error } = await supabaseClient
+            .from('file_log')
+            .select('question_set, filename, description, created_at')
+            .eq('content_hash', contentHash)
+            .order('created_at', { ascending: false })
+            .limit(1);
+        
+        if (error) {
+            console.error("Error checking for previous upload:", error);
+            return;
+        }
+        
+        // If we found a match, show a warning
+        if (data && data.length > 0) {
+            const previousUpload = data[0];
+            const formattedDate = new Date(previousUpload.created_at).toLocaleString();
+            
+            // Create warning message
+            let warningMessage = `
+                <strong>⚠️ Warning:</strong> A file with the same content (hash: ${contentHash}) 
+                has been uploaded before on ${formattedDate}.
+                <br><br>
+                <strong>Previous upload details:</strong><br>
+                <ul>
+                    <li><strong>Question Set:</strong> ${escapeHtml(previousUpload.question_set)}</li>
+                    <li><strong>Filename:</strong> ${escapeHtml(previousUpload.filename || 'Not specified')}</li>
+            `;
+            
+            if (previousUpload.description) {
+                warningMessage += `<li><strong>Description:</strong> ${escapeHtml(previousUpload.description)}</li>`;
+            }
+            
+            warningMessage += `</ul>`;
+            
+            // Show the warning
+            fileWarningContainer.innerHTML = warningMessage;
+            fileWarningContainer.style.display = 'block';
+        }
+    } catch (error) {
+        console.error("Error checking for previous upload:", error);
+    }
+}
+
+/**
+ * Escape HTML to prevent XSS
+ * @param {string} unsafe 
+ * @returns {string} Escaped HTML
+ */
+function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 } 
