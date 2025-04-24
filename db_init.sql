@@ -95,4 +95,8 @@ VALUES (1, '[
   {"name": "synthNew", "percentage": 50, "max_answers": 5}
 ]'::jsonb)
 ON CONFLICT (id) DO NOTHING;
+
+-- Enable aggregate functions for PostgREST/Supabase queries
+ALTER ROLE authenticator SET pgrst.db_aggregates_enabled = 'true';
+NOTIFY pgrst, 'reload config';
       
