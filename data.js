@@ -9,6 +9,10 @@ const statsLoadingSpinner = document.getElementById('statsLoadingSpinner');
 const statsTableContainer = document.getElementById('statsTableContainer');
 const statsTableBody = document.getElementById('statsTableBody');
 const statsErrorContainer = document.getElementById('statsErrorContainer');
+const fileHashLoadingSpinner = document.getElementById('fileHashLoadingSpinner');
+const fileHashTableContainer = document.getElementById('fileHashTableContainer');
+const fileHashTableBody = document.getElementById('fileHashTableBody');
+const fileHashErrorContainer = document.getElementById('fileHashErrorContainer');
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Fetch question set statistics
     fetchQuestionStats();
+    
+    // Fetch file hash statistics
+    fetchFileHashStats();
     
     // Add event listeners for buttons
     clearLocalStorageBtn.addEventListener('click', clearLocalStorage);
@@ -133,9 +140,8 @@ async function fetchQuestionStats() {
             .from('questions')
             .select(`
                 question_set,
-                user_id,
                 count(),
-                    total_answers:answer_count.sum()
+                total_answers:answer_count.sum()
             `);
         
         if (error) {
@@ -154,7 +160,7 @@ async function fetchQuestionStats() {
             // No data found
             const noDataRow = document.createElement('tr');
             noDataRow.innerHTML = `
-                <td colspan="5" class="text-center">No question sets found in the database.</td>
+                <td colspan="4" class="text-center">No question sets found in the database.</td>
             `;
             statsTableBody.appendChild(noDataRow);
         } else {
@@ -164,22 +170,12 @@ async function fetchQuestionStats() {
             // Add each question set to the table
             data.forEach(set => {
                 const row = document.createElement('tr');
-                // Highlight the current user's rows
-                if (set.user_id === currentUserId) {
-                    row.className = 'table-info';
-                }
-                
-                // Format user ID for display - show only first 8 chars with ellipsis
-                const displayUserId = set.user_id ? 
-                    (set.user_id.length > 12 ? set.user_id.substring(0, 8) + '...' : set.user_id) : 
-                    'N/A';
                 
                 // Format total answers, handle nulls
                 const totalAnswers = set.total_answers !== null ? set.total_answers : 0;
                 
                 row.innerHTML = `
                     <td>${set.question_set}</td>
-                    <td title="${set.user_id || 'N/A'}">${displayUserId}</td>
                     <td>${set.count}</td>
                     <td>${totalAnswers}</td>
                     <td>
@@ -196,7 +192,6 @@ async function fetchQuestionStats() {
             totalRow.className = 'table-secondary';
             totalRow.innerHTML = `
                 <td><strong>Total</strong></td>
-                <td>All Users</td>
                 <td><strong>${totalCount}</strong></td>
                 <td><strong>${totalAnswers}</strong></td>
                 <td>
@@ -212,6 +207,112 @@ async function fetchQuestionStats() {
         statsErrorContainer.style.display = 'block';
         statsErrorContainer.textContent = 'Error loading statistics: ' + error.message;
     }
+}
+
+// Fetch file hash statistics
+async function fetchFileHashStats() {
+    try {
+        // Show loading spinner
+        fileHashLoadingSpinner.style.display = 'block';
+        fileHashTableContainer.style.display = 'none';
+        fileHashErrorContainer.style.display = 'none';
+        
+        // Query Supabase for file hash statistics
+        const { data, error } = await window.supabaseClient
+            .from('view_file_content_aggas')
+            .select('*');
+        
+        if (error) {
+            console.error('Error fetching file hash stats:', error);
+            throw new Error(error.message);
+        }
+        
+        console.log('Raw data from view:', data);
+        
+        // Hide spinner and show table
+        fileHashLoadingSpinner.style.display = 'none';
+        fileHashTableContainer.style.display = 'block';
+        
+        // Clear existing table data
+        fileHashTableBody.innerHTML = '';
+        
+        if (!data || data.length === 0) {
+            // No data found
+            const noDataRow = document.createElement('tr');
+            noDataRow.innerHTML = `
+                <td colspan="7" class="text-center">No file hash statistics found in the database.</td>
+            `;
+            fileHashTableBody.appendChild(noDataRow);
+        } else {
+            // Add each file hash to the table
+            data.forEach(file => {
+                const row = document.createElement('tr');
+                
+                // Get the correct hash field based on database view
+                let hashField = file.src_file_content_hash;
+                
+                // If the hash field doesn't exist, log all available fields and try alternatives
+                if (!hashField) {
+                    console.log('Available fields:', Object.keys(file));
+                    
+                    // Try alternative field names
+                    hashField = file.src_file_content_hash || 
+                                file.file_content_hash || 
+                                file.content_hash || 
+                                file.hash || 
+                                Object.keys(file)[0]; // Fallback to first column
+                    
+                    console.log('Using hash field:', hashField);
+                }
+                
+                // Format arrays for display - handle potential field name variations
+                const questionSets = formatArrayField(file.questino_sets || file.question_sets);
+                const filenames = formatArrayField(file.filenames);
+                const descriptions = formatArrayField(file.descriptions);
+                
+                // Create a shortened hash for display (if we have a hash)
+                let displayHash = 'Unknown';
+                if (hashField) {
+                    displayHash = `${hashField.substring(0, 8)}...${hashField.substring(hashField.length - 8)}`;
+                }
+                
+                row.innerHTML = `
+                    <td title="${hashField}">${displayHash}</td>
+                    <td>${file.distinct_id_count || 0}</td>
+                    <td>${file.question_hash_count || 0}</td>
+                    <td>${questionSets}</td>
+                    <td>${filenames}</td>
+                    <td>${descriptions}</td>
+                    <td>
+                        <a href="app.html?fh=${encodeURIComponent(hashField)}" class="btn btn-sm btn-primary">Practice</a>
+                    </td>
+                `;
+                fileHashTableBody.appendChild(row);
+            });
+        }
+        
+    } catch (error) {
+        console.error('Error in fetchFileHashStats:', error);
+        fileHashLoadingSpinner.style.display = 'none';
+        fileHashErrorContainer.style.display = 'block';
+        fileHashErrorContainer.textContent = 'Error loading file hash statistics: ' + error.message;
+    }
+}
+
+// Helper function to format array fields from the database
+function formatArrayField(arrayField) {
+    if (!arrayField || !Array.isArray(arrayField) || arrayField.length === 0) {
+        return 'N/A';
+    }
+    
+    // Filter out null values and join with commas
+    const filteredArray = arrayField.filter(item => item !== null);
+    
+    if (filteredArray.length === 0) {
+        return 'N/A';
+    }
+    
+    return filteredArray.join(', ');
 }
 
 // Helper function to show error message

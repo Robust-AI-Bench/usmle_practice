@@ -139,7 +139,6 @@
                         <thead>
                             <tr>
                                 <th>Question Set</th>
-                                <th>User ID</th>
                                 <th>Question Count</th>
                                 <th>Total Answers</th>
                                 <th>Actions</th>
@@ -152,6 +151,38 @@
                 </div>
                 <div id="statsErrorContainer" class="alert alert-danger mt-3" style="display: none;">
                     Error loading statistics. Please refresh the page and try again.
+                </div>
+            </div>
+            
+            <!-- File Content Hash Statistics Section -->
+            <h3 class="mt-4">File Upload Statistics</h3>
+            <div id="fileHashStatsContainer">
+                <div class="spinner-container" id="fileHashLoadingSpinner">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Loading file statistics...</p>
+                </div>
+                <div id="fileHashTableContainer" style="display: none;">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>File Hash</th>
+                                <th>Question Count</th>
+                                <th>Unique Questions</th>
+                                <th>Question Sets</th>
+                                <th>Filenames</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fileHashTableBody">
+                            <!-- This will be populated by data.js -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="fileHashErrorContainer" class="alert alert-danger mt-3" style="display: none;">
+                    Error loading file statistics. Please refresh the page and try again.
                 </div>
             </div>
         </div>

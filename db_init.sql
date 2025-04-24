@@ -118,3 +118,8 @@ CREATE TABLE IF NOT EXISTS public.file_log (
 	CONSTRAINT file_log_pkey PRIMARY KEY (id)
 );
       
+
+create view IF NOT EXISTS   public.view_file_content_aggas as select q.src_file_content_hash, count(distinct question_id) distinct_id_count, count(distinct question_hash) question_hash_count  , ARRAY_AGG(distinct(q.user_id)) as users, ARRAY_AGG(distinct(f.question_set)) as questino_sets,  ARRAY_AGG(distinct(f.filename)) as filenames , ARRAY_AGG(distinct(f.description)) as descriptions    
+from   questions  q  
+left join  file_log  f  on q.src_file_content_hash=f.content_hash
+  group by q.src_file_content_hash ;

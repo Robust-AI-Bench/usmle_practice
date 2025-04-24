@@ -45,11 +45,13 @@ let currentQuestions = [];
 let currentQuestionIndex = 0;
 let questionSets = [];
 let questionSetMaxIds = {};
+let fileHashMaxIds = {}; // Track max IDs for src_file_content_hash filtering
 let selectedAnswer = null;
 let answeredQuestions = {};
 let flaggedQuestions = {}; // Track which questions have been flagged
 let isDebugMode = false; // Track if debug mode is enabled
 let specificQuestionSet = null; // Track if a specific question set is requested
+let specificFileHash = null; // Track if a specific file hash is requested
 let namedParam = null; // Store the value of the "named" parameter
 
 // Initialize the application
@@ -71,6 +73,14 @@ async function initApp() {
     specificQuestionSet = urlParams.get('qs');
     if (specificQuestionSet) {
         console.log(`Filtering to specific question set: ${specificQuestionSet}`);
+    }
+    
+    // Check for specific file hash filter (support both full name and shorthand 'fh')
+    specificFileHash = urlParams.get('src_file_content_hash') || urlParams.get('fh');
+    if (specificFileHash) {
+        // Trim any whitespace and ensure proper formatting
+        specificFileHash = specificFileHash.trim();
+        console.log(`Filtering to specific file hash: ${specificFileHash}`);
     }
     
     // Get "named" parameter from URL
@@ -121,6 +131,12 @@ async function checkOrCreateUser() {
     const storedMaxIds = localStorage.getItem('questionSetMaxIds');
     if (storedMaxIds) {
         questionSetMaxIds = JSON.parse(storedMaxIds);
+    }
+    
+    // Load max file hash IDs from local storage
+    const storedFileHashMaxIds = localStorage.getItem('fileHashMaxIds');
+    if (storedFileHashMaxIds) {
+        fileHashMaxIds = JSON.parse(storedFileHashMaxIds);
     }
 }
 
@@ -250,83 +266,184 @@ async function loadQuestions() {
         
         console.log('Loading questions with:', questionSets);
         console.log('Current max question IDs:', questionSetMaxIds);
-        
-        // Filter question sets if a specific set is requested
-        let setsToLoad = questionSets;
-        if (specificQuestionSet) {
-            // Only load the specified question set with 100% percentage
-            setsToLoad = questionSets.filter(set => set.name === specificQuestionSet);
-            
-            // If the requested set doesn't exist, create a temporary configuration for it
-            if (setsToLoad.length === 0) {
-                setsToLoad = [{ name: specificQuestionSet, percentage: 100, max_answers: null }];
-            } else {
-                // Override the percentage to 100%
-                setsToLoad = setsToLoad.map(set => ({ ...set, percentage: 100 }));
-            }
-            
-            console.log(`Filtering to load only question set: ${specificQuestionSet}`, setsToLoad);
+        if (specificFileHash) {
+            console.log('Current max file hash IDs:', fileHashMaxIds);
         }
         
-        // Initialize question arrays for each set
-        setsToLoad.forEach(set => {
-            questionsFromSets[set.name] = [];
-        });
-        
-        // Load questions from each question set based on percentage
-        for (const setConfig of setsToLoad) {
-            const maxId = questionSetMaxIds[setConfig.name] || 0;
-            const count = Math.floor(20 * (setConfig.percentage / 100));
-            
-            if (count <= 0) continue;
-            
-            console.log(`Loading ${count} questions from ${setConfig.name} with maxId ${maxId}`);
+        // If src_file_content_hash is specified, we ignore question sets
+        if (specificFileHash) {
+            console.log(`Loading questions with file hash: ${specificFileHash}`);
             
             try {
-                // First do a count query to see if any questions exist
+                // First do a count query to see if any questions exist with this hash
                 const { count: questionCount, error: countError } = await supabaseClient
                     .from('questions')
                     .select('*', { count: 'exact', head: true })
-                    .eq('question_set', setConfig.name);
+                    .eq('src_file_content_hash', specificFileHash);
                 
                 if (countError) {
-                    console.error(`Error counting questions for ${setConfig.name}:`, countError);
+                    console.error(`Error counting questions with hash ${specificFileHash}:`, countError);
                 } else {
-                    console.log(`Total questions in ${setConfig.name} set: ${questionCount}`);
+                    console.log(`Total questions with hash ${specificFileHash}: ${questionCount}`);
                 }
                 
-                // Execute the query with correct Supabase syntax
-                let query = supabaseClient
+                // Get the max ID we've seen for this hash
+                const maxId = fileHashMaxIds[specificFileHash] || 0;
+                
+                // Log the exact query we're about to make for debugging
+                console.log(`Making query with file hash: "${specificFileHash}"`);
+                console.log(`Hash type: ${typeof specificFileHash}, length: ${specificFileHash.length}`);
+                
+                // Try a direct query to verify hash values
+                const { data: verifyData, error: verifyError } = await supabaseClient
                     .from('questions')
-                    .select('*')
-                    .eq('question_set', setConfig.name)
-                    .gt('question_id', maxId)
-                    .order('question_id', { ascending: true });
+                    .select('src_file_content_hash')
+                    .limit(10);
                 
-                // Add filter for max answers if configured
-                if (setConfig.max_answers !== null) {
-                    query = query.lt('answer_count', setConfig.max_answers);
+                if (!verifyError && verifyData && verifyData.length > 0) {
+                    console.log('Sample hashes in database:');
+                    
+                    // Check if the hash exists in any form (case insensitive)
+                    let foundExactMatch = false;
+                    let foundCaseInsensitiveMatch = false;
+                    let matchedHash = null;
+                    
+                    verifyData.forEach(item => {
+                        if (item.src_file_content_hash) {
+                            console.log(`- "${item.src_file_content_hash}" (${typeof item.src_file_content_hash}, ${item.src_file_content_hash.length})`);
+                            
+                            // Check for exact match
+                            if (item.src_file_content_hash === specificFileHash) {
+                                console.log(`  ✓ EXACT MATCH with user-provided hash`);
+                                foundExactMatch = true;
+                                matchedHash = item.src_file_content_hash;
+                            } 
+                            // Check for case-insensitive match
+                            else if (item.src_file_content_hash.toLowerCase() === specificFileHash.toLowerCase()) {
+                                console.log(`  ✓ CASE-INSENSITIVE MATCH with user-provided hash`);
+                                foundCaseInsensitiveMatch = true;
+                                matchedHash = item.src_file_content_hash;
+                            }
+                        } else {
+                            console.log(`- null or undefined hash`);
+                        }
+                    });
+                    
+                    // If we found a case-insensitive match but not an exact match, use the exact case from database
+                    if (!foundExactMatch && foundCaseInsensitiveMatch && matchedHash) {
+                        console.log(`Using exact case from database: "${matchedHash}" instead of "${specificFileHash}"`);
+                        specificFileHash = matchedHash;
+                    }
                 }
                 
-                // Apply limit and execute
-                const { data, error } = await query.limit(count);
+                // Execute the query to get questions by file hash
+                const { data, error } = await supabaseClient
+                    .from('questions')
+                    .select()
+                    .eq('src_file_content_hash', specificFileHash)
+                    .gt('question_id', maxId)
+                    .order('question_id', { ascending: true })
+                    .limit(20);
                 
                 if (error) {
-                    console.error(`Error querying questions from ${setConfig.name}:`, error);
+                    console.error(`Error querying questions with hash ${specificFileHash}:`, error);
                     throw error;
                 }
                 
-                console.log(`Received ${data ? data.length : 0} questions from ${setConfig.name}`);
+                console.log(`Received ${data ? data.length : 0} questions with hash ${specificFileHash}`);
                 
                 if (data && data.length > 0) {
-                    // Store questions by set
-                    questionsFromSets[setConfig.name] = data.map(q => ({ ...q, set: setConfig.name }));
+                    // Store all questions in a single set for simplicity
+                    const setName = 'file_hash_filtered';
+                    questionsFromSets[setName] = data.map(q => ({ 
+                        ...q, 
+                        set: setName,
+                        src_file_content_hash: specificFileHash
+                    }));
                 } else {
-                    console.log(`No questions returned for ${setConfig.name}`);
+                    console.log(`No questions returned for hash ${specificFileHash}`);
                 }
-            } catch (setError) {
-                console.error(`Error processing question set ${setConfig.name}:`, setError);
-                // Continue with other sets instead of aborting completely
+            } catch (error) {
+                console.error(`Error processing file hash query:`, error);
+            }
+        } else {
+            // Filter question sets if a specific set is requested
+            let setsToLoad = questionSets;
+            if (specificQuestionSet) {
+                // Only load the specified question set with 100% percentage
+                setsToLoad = questionSets.filter(set => set.name === specificQuestionSet);
+                
+                // If the requested set doesn't exist, create a temporary configuration for it
+                if (setsToLoad.length === 0) {
+                    setsToLoad = [{ name: specificQuestionSet, percentage: 100, max_answers: null }];
+                } else {
+                    // Override the percentage to 100%
+                    setsToLoad = setsToLoad.map(set => ({ ...set, percentage: 100 }));
+                }
+                
+                console.log(`Filtering to load only question set: ${specificQuestionSet}`, setsToLoad);
+            }
+            
+            // Initialize question arrays for each set
+            setsToLoad.forEach(set => {
+                questionsFromSets[set.name] = [];
+            });
+            
+            // Load questions from each question set based on percentage
+            for (const setConfig of setsToLoad) {
+                const maxId = questionSetMaxIds[setConfig.name] || 0;
+                const count = Math.floor(20 * (setConfig.percentage / 100));
+                
+                if (count <= 0) continue;
+                
+                console.log(`Loading ${count} questions from ${setConfig.name} with maxId ${maxId}`);
+                
+                try {
+                    // First do a count query to see if any questions exist
+                    const { count: questionCount, error: countError } = await supabaseClient
+                        .from('questions')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('question_set', setConfig.name);
+                    
+                    if (countError) {
+                        console.error(`Error counting questions for ${setConfig.name}:`, countError);
+                    } else {
+                        console.log(`Total questions in ${setConfig.name} set: ${questionCount}`);
+                    }
+                    
+                    // Execute the query with correct Supabase syntax
+                    let query = supabaseClient
+                        .from('questions')
+                        .select('*')
+                        .eq('question_set', setConfig.name)
+                        .gt('question_id', maxId)
+                        .order('question_id', { ascending: true });
+                    
+                    // Add filter for max answers if configured
+                    if (setConfig.max_answers !== null) {
+                        query = query.lt('answer_count', setConfig.max_answers);
+                    }
+                    
+                    // Apply limit and execute
+                    const { data, error } = await query.limit(count);
+                    
+                    if (error) {
+                        console.error(`Error querying questions from ${setConfig.name}:`, error);
+                        throw error;
+                    }
+                    
+                    console.log(`Received ${data ? data.length : 0} questions from ${setConfig.name}`);
+                    
+                    if (data && data.length > 0) {
+                        // Store questions by set
+                        questionsFromSets[setConfig.name] = data.map(q => ({ ...q, set: setConfig.name }));
+                    } else {
+                        console.log(`No questions returned for ${setConfig.name}`);
+                    }
+                } catch (setError) {
+                    console.error(`Error processing question set ${setConfig.name}:`, setError);
+                    // Continue with other sets instead of aborting completely
+                }
             }
         }
         
@@ -639,12 +756,6 @@ async function submitAnswer() {
             }
         }, 500);
     }
-    
-    // Update max question ID if needed
-    if (!questionSetMaxIds[question.set] || question.question_id > questionSetMaxIds[question.set]) {
-        questionSetMaxIds[question.set] = question.question_id;
-        localStorage.setItem('questionSetMaxIds', JSON.stringify(questionSetMaxIds));
-    }
 }
 
 // Save the user's answer
@@ -679,6 +790,21 @@ async function saveAnswer(question, selectedOption, isCorrect) {
         if (error) throw error;
     } catch (error) {
         console.error('Error saving answer:', error);
+    }
+
+    // Update max question ID for question set if needed
+    if (!questionSetMaxIds[question.set] || question.question_id > questionSetMaxIds[question.set]) {
+        questionSetMaxIds[question.set] = question.question_id;
+        localStorage.setItem('questionSetMaxIds', JSON.stringify(questionSetMaxIds));
+    }
+    
+    // Update max question ID for file hash if needed
+    if (question.src_file_content_hash) {
+        const fileHash = question.src_file_content_hash;
+        if (!fileHashMaxIds[fileHash] || question.question_id > fileHashMaxIds[fileHash]) {
+            fileHashMaxIds[fileHash] = question.question_id;
+            localStorage.setItem('fileHashMaxIds', JSON.stringify(fileHashMaxIds));
+        }
     }
 }
 
@@ -763,7 +889,60 @@ async function loadMoreQuestions() {
         const currentQuestionsSnapshot = [...currentQuestions];
         const currentIndexSnapshot = currentQuestionIndex;
         
-        // Use the same approach as loadQuestions
+        // If src_file_content_hash is specified, load more questions by file hash
+        if (specificFileHash) {
+            console.log(`Loading more questions with file hash: ${specificFileHash}`);
+            
+            try {
+                // Get the max ID we've seen for this hash
+                const maxId = fileHashMaxIds[specificFileHash] || 0;
+                
+                // Log the exact query we're about to make for debugging
+                console.log(`Loading more questions with file hash: "${specificFileHash}"`);
+                console.log(`Hash type: ${typeof specificFileHash}, length: ${specificFileHash.length}`);
+                
+                // Execute the query to get more questions by file hash
+                const { data, error } = await supabaseClient
+                    .from('questions')
+                    .select()
+                    .eq('src_file_content_hash', specificFileHash)
+                    .gt('question_id', maxId)
+                    .order('question_id', { ascending: true })
+                    .limit(10); // Load 10 more questions
+                
+                if (error) {
+                    console.error(`Error querying more questions with hash ${specificFileHash}:`, error);
+                    return;
+                }
+                
+                console.log(`Received ${data ? data.length : 0} more questions with hash ${specificFileHash}`);
+                
+                if (data && data.length > 0) {
+                    // Store all questions in a single set for simplicity
+                    const setName = 'file_hash_filtered';
+                    const newQuestions = data.map(q => ({ 
+                        ...q, 
+                        set: setName,
+                        src_file_content_hash: specificFileHash
+                    }));
+                    
+                    // Add to current questions
+                    currentQuestions = [...currentQuestions, ...newQuestions];
+                    console.log(`Added ${newQuestions.length} more questions by file hash`);
+                    
+                    // Always show continue button when more questions are loaded
+                    continueBtn.style.display = 'block';
+                } else {
+                    console.log(`No more questions available for hash ${specificFileHash}`);
+                }
+            } catch (error) {
+                console.error(`Error loading more questions by file hash:`, error);
+            }
+            
+            return;
+        }
+        
+        // Use the same approach as loadQuestions for question sets
         let questionsFromSets = {}; // Store questions from each set
         
         // Filter question sets if a specific set is requested
