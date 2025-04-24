@@ -32,7 +32,7 @@ const rl = readline.createInterface({
 
 // Main menu
 function showMenu() {
-  console.log('\n=== USMLE Practice Database CLI ===');
+  console.log('\n=== peerBench QA Database CLI ===');
   console.log('1. Initialize database tables');
   console.log('2. Upload questions from file');
   console.log('3. Show configuration');
@@ -407,5 +407,5 @@ async function updateConfiguration() {
 }
 
 // Start the CLI
-console.log('USMLE Practice Database CLI');
+console.log('peerBench QA Database CLI');
 showMenu(); 
