@@ -524,6 +524,14 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
         };
     }
 
+    // Ensure Supabase client is available
+    if (!window.supabaseClient) {
+        return {
+            success: false,
+            message: "Database connection not available."
+        };
+    }
+
     const results = {
         success: true,
         total: questions.length,
@@ -545,7 +553,7 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
     // Process each batch
     for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
         const batch = batches[batchIndex];
-        const batchData = [];
+        const processedBatch = [];
         
         // Process each question in the batch
         for (const q of batch) {
@@ -561,84 +569,97 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
                 }
                 
                 // Create a hash of the question to check for duplicates
-                const questionHash = await createQuestionHash(q.question);
+                const questionData = q.question + JSON.stringify(q.options) + q.answer;
+                const questionHash = await createQuestionHash(questionData);
+                
+                // Define known fields that we explicitly map to database columns
+                const knownMappedFields = [
+                    'question',
+                    'options',
+                    'answer',
+                    'answer_idx',
+                    'explanation',
+                    'category',
+                    'difficulty',
+                    'tags',
+                    'source',
+                    'meta_info',
+                    'other'
+                ];
+                
+                // Identify unmapped fields for overflow
+                const overflowFields = {};
+                Object.keys(q).forEach(key => {
+                    // Skip fields that will be explicitly mapped to database columns
+                    if (!knownMappedFields.includes(key) && key !== '_lineNumber' && key !== '_numeric_answer_idx') {
+                        overflowFields[key] = q[key];
+                    }
+                });
                 
                 // Prepare the question data for upload
-                const questionData = {
-                    hash: questionHash,
+                const questionObj = {
+                    question_set: questionSet,
                     question: q.question,
-                    // Preserve the original options format (object or array)
                     options: typeof q.options === 'string' ? q.options : JSON.stringify(q.options),
-                    answer_idx: q.answer_idx,
                     answer: q.answer,
-                    // Map known fields to database columns
+                    answer_idx: q.answer_idx,
+                    question_hash: questionHash,
+                    meta_info: q.meta_info || null,
                     explanation: q.explanation || null,
                     category: q.category || null,
                     difficulty: q.difficulty || null,
                     tags: q.tags ? (Array.isArray(q.tags) ? q.tags.join(',') : q.tags) : null,
-                    source: q.source || null
+                    source: q.source || null,
+                    answer_count: 0,
+                    extraJ: JSON.stringify(fileMetadata) // Add file metadata to extraJ column
                 };
                 
-                // Store any additional fields in the "other" JSON column
-                const knownFields = ['question', 'options', 'answer_idx', 'answer', 'explanation', 
-                                     'category', 'difficulty', 'tags', 'source'];
-                const otherFields = {};
-                let hasOtherFields = false;
-                
-                // Collect any extra fields not in our known list
-                for (const key in q) {
-                    if (!knownFields.includes(key) && key !== '_lineNumber' && key !== '_numeric_answer_idx') {
-                        otherFields[key] = q[key];
-                        hasOtherFields = true;
-                    }
+                // Add 'other' column if there are additional fields
+                if (Object.keys(overflowFields).length > 0) {
+                    questionObj.other = JSON.stringify(overflowFields);
                 }
                 
-                if (hasOtherFields) {
-                    questionData.other = JSON.stringify(otherFields);
-                }
-                
-                batchData.push(questionData);
+                processedBatch.push(questionObj);
             } catch (error) {
                 results.failed++;
                 results.errors.push(`Failed to process question: ${error.message}`);
             }
         }
         
-        if (batchData.length === 0) {
+        if (processedBatch.length === 0) {
             continue; // Skip empty batches
         }
         
         try {
-            // Send the batch to the server
-            const response = await fetch('/api/questions/upload', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ questions: batchData })
-            });
-            
-            const batchResult = await response.json();
-            
-            if (!batchResult.success) {
-                throw new Error(batchResult.message || 'Unknown server error');
+            // Use Supabase client to insert questions directly
+            const { data, error } = await window.supabaseClient
+                .from('questions')
+                .insert(processedBatch);
+                
+            if (error) {
+                throw error;
             }
             
-            // Update results with batch information
-            results.processed += batchResult.processed || 0;
-            results.skipped += batchResult.skipped || 0;
-            results.failed += batchResult.failed || 0;
+            // Update results
+            results.processed += processedBatch.length;
             
-            if (batchResult.duplicates && batchResult.duplicates.length > 0) {
-                results.duplicates = results.duplicates.concat(batchResult.duplicates);
-            }
+            // Update UI progress
+            const progressPercent = Math.round((results.processed + results.failed) / results.total * 100);
+            uploadProgress.style.width = `${progressPercent}%`;
+            uploadProgress.textContent = `${progressPercent}%`;
             
-            if (batchResult.errors && batchResult.errors.length > 0) {
-                results.errors = results.errors.concat(batchResult.errors);
-            }
         } catch (error) {
-            results.failed += batch.length;
-            results.errors.push(`Batch ${batchIndex + 1} failed: ${error.message}`);
+            // Check if error is for duplicate questions
+            if (error.code === '23505' || error.message?.includes('duplicate')) {
+                // Extract the duplicate questions and mark them as skipped
+                for (const q of processedBatch) {
+                    results.skipped++;
+                    results.duplicates.push(q.question.substring(0, 50) + '...');
+                }
+            } else {
+                results.failed += processedBatch.length;
+                results.errors.push(`Batch ${batchIndex + 1} failed: ${error.message}`);
+            }
         }
     }
     
