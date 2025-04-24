@@ -3,8 +3,8 @@ const supabaseUrl = 'https://jrfpjposoiuqdadqjfww.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyZnBqcG9zb2l1cWRhZHFqZnd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwNzU3NzgsImV4cCI6MjA2MDY1MTc3OH0.iAvSNpaJwqgKBwCaNuIt5wjGe1cLckNMK2Mo3bz2WXQ';
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-// Redirect URL after successful authentication
-const redirectUrl = 'https://peerbench-qa.vercel.app/';
+// Redirect URL after successful authentication - point to index.html instead of app.html
+const redirectUrl = 'index.html';
 
 // DOM Elements
 const loginForm = document.getElementById('loginForm');
@@ -19,6 +19,12 @@ const signupPassword = document.getElementById('signupPassword');
 const confirmPassword = document.getElementById('confirmPassword');
 const signupError = document.getElementById('signupError');
 const signupSuccess = document.getElementById('signupSuccess');
+
+// Magic Link Elements
+const magicLinkForm = document.getElementById('magicLinkForm');
+const magicLinkEmail = document.getElementById('magicLinkEmail');
+const magicLinkError = document.getElementById('magicLinkError');
+const magicLinkSuccess = document.getElementById('magicLinkSuccess');
 
 // Handle login form submission
 loginForm.addEventListener('submit', async (e) => {
@@ -102,17 +108,82 @@ signupForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Check if user is already authenticated
+// Handle magic link form submission
+magicLinkForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Hide previous error messages
+    magicLinkError.style.display = 'none';
+    magicLinkSuccess.style.display = 'none';
+    
+    try {
+        // Request magic link email
+        const { error } = await supabaseClient.auth.signInWithOtp({
+            email: magicLinkEmail.value,
+            options: {
+                shouldCreateUser: true,
+                emailRedirectTo: redirectUrl
+            }
+        });
+        
+        if (error) throw error;
+        
+        // Show success message
+        magicLinkSuccess.style.display = 'block';
+        
+        // Clear form
+        magicLinkForm.reset();
+        
+    } catch (error) {
+        console.error('Magic link error:', error);
+        magicLinkError.textContent = error.message || 'Failed to send magic link. Please try again.';
+        magicLinkError.style.display = 'block';
+    }
+});
+
+// Check if user is already authenticated - NO automatic redirect
 async function checkSession() {
     const { data, error } = await supabaseClient.auth.getSession();
     
+    // We no longer force redirect to allow anonymous users
+    // Just storing the session info if it exists
     if (data && data.session) {
-        // User is already logged in, redirect
-        window.location.href = redirectUrl;
+        localStorage.setItem('userId', data.session.user.id);
+    }
+}
+
+// Check for OTP confirmation from URL
+async function checkOtpConfirmation() {
+    // Get URL hash parameters
+    const hashParams = new URLSearchParams(window.location.hash.substr(1));
+    const type = hashParams.get('type');
+    const token = hashParams.get('access_token');
+    
+    // Check if this is an OTP verification
+    if (type === 'recovery' || type === 'magiclink') {
+        try {
+            // Handle the redirect automatically
+            const { data, error } = await supabaseClient.auth.getUser(token);
+            
+            if (error) throw error;
+            
+            // User is authenticated, store info and redirect
+            if (data && data.user) {
+                localStorage.setItem('userId', data.user.id);
+            }
+            
+            alert('You have been successfully authenticated!');
+            window.location.href = redirectUrl;
+            
+        } catch (error) {
+            console.error('Auth confirmation error:', error);
+            alert('Failed to verify your authentication. Please try again.');
+        }
     }
 }
 
 // Run on page load
 document.addEventListener('DOMContentLoaded', () => {
     checkSession();
+    checkOtpConfirmation();
 }); 

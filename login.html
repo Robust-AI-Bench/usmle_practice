@@ -59,6 +59,9 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup" type="button" role="tab" aria-controls="signup" aria-selected="false">Sign Up</button>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="magic-link-tab" data-bs-toggle="tab" data-bs-target="#magic-link" type="button" role="tab" aria-controls="magic-link" aria-selected="false">Magic Link</button>
+                </li>
             </ul>
             
             <div class="tab-content" id="authTabsContent">
@@ -98,6 +101,20 @@
                     </form>
                     <div class="alert alert-danger" id="signupError" role="alert"></div>
                     <div class="alert alert-success" id="signupSuccess" role="alert">Account created! Check your email for confirmation.</div>
+                </div>
+                
+                <!-- Magic Link Form -->
+                <div class="tab-pane fade" id="magic-link" role="tabpanel" aria-labelledby="magic-link-tab">
+                    <p class="text-muted mb-3">Receive a sign-in link via email</p>
+                    <form id="magicLinkForm">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="magicLinkEmail" placeholder="name@example.com" required>
+                            <label for="magicLinkEmail">Email address</label>
+                        </div>
+                        <button type="submit" class="btn btn-info auth-btn">Send Magic Link</button>
+                    </form>
+                    <div class="alert alert-danger" id="magicLinkError" role="alert"></div>
+                    <div class="alert alert-success" id="magicLinkSuccess" role="alert">Magic link sent! Check your email to sign in.</div>
                 </div>
             </div>
         </div>
