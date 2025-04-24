@@ -1,7 +1,24 @@
-// Initialize Supabase client
-const supabaseUrl = 'https://jrfpjposoiuqdadqjfww.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyZnBqcG9zb2l1cWRhZHFqZnd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwNzU3NzgsImV4cCI6MjA2MDY1MTc3OH0.iAvSNpaJwqgKBwCaNuIt5wjGe1cLckNMK2Mo3bz2WXQ';
-const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+// Initialize Supabase client if not already initialized
+let supabaseClient;
+if (typeof window.supabaseClient === 'undefined') {
+    // Check if the variables are already declared in global scope
+    if (typeof window.supabaseUrl === 'undefined') {
+        const supabaseUrl = 'https://jrfpjposoiuqdadqjfww.supabase.co';
+        window.supabaseUrl = supabaseUrl;
+    }
+    
+    if (typeof window.supabaseAnonKey === 'undefined') {
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyZnBqcG9zb2l1cWRhZHFqZnd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwNzU3NzgsImV4cCI6MjA2MDY1MTc3OH0.iAvSNpaJwqgKBwCaNuIt5wjGe1cLckNMK2Mo3bz2WXQ';
+        window.supabaseAnonKey = supabaseAnonKey;
+    }
+    
+    // Create the client if not already created
+    supabaseClient = window.supabaseClient || supabase.createClient(window.supabaseUrl, window.supabaseAnonKey);
+    window.supabaseClient = supabaseClient;
+} else {
+    // Use the existing client
+    supabaseClient = window.supabaseClient;
+}
 
 // DOM Elements
 const loadingElement = document.getElementById('loading');

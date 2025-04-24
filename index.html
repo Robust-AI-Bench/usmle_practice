@@ -122,8 +122,48 @@
                 // Get user info
                 const { data: userData } = await supabaseClient.auth.getUser();
                 if (userData && userData.user) {
-                    welcomeUser.textContent = `Welcome, ${userData.user.email}`;
-                    localStorage.setItem('userId', userData.user.id);
+                    // Store user ID
+                    const userId = userData.user.id;
+                    localStorage.setItem('userId', userId);
+                    
+                    // Get email if available
+                    const userEmail = userData.user.email || "";
+                    
+                    // Try to get named value from user_fingerprints table
+                    let displayName = "";
+                    
+                    // First check localStorage for named value
+                    const storedName = localStorage.getItem('userName');
+                    if (storedName) {
+                        displayName = storedName;
+                    } else {
+                        // Try to fetch named from user_fingerprints table
+                        try {
+                            const { data: fingerprintData, error: fingerprintError } = await supabaseClient
+                                .from('user_fingerprints')
+                                .select('named')
+                                .eq('user_id', userId)
+                                .single();
+                                
+                            if (!fingerprintError && fingerprintData && fingerprintData.named) {
+                                displayName = fingerprintData.named;
+                                // Store for future use
+                                localStorage.setItem('userName', displayName);
+                            }
+                        } catch (e) {
+                            console.error("Error fetching user fingerprint data:", e);
+                        }
+                    }
+                    
+                    // Update welcome message with user ID, email and name if available
+                    let welcomeMessage = `ID: <span style="font-size: 0.8rem;">${userId}</span>`;
+                    if (userEmail) {
+                        welcomeMessage += ` | Email: ${userEmail}`;
+                    }
+                    if (displayName) {
+                        welcomeMessage += ` | Name: ${displayName}`;
+                    }
+                    welcomeUser.innerHTML = welcomeMessage;
                 }
             } else {
                 // User is not logged in, show guest section
@@ -140,6 +180,7 @@
                 if (!error) {
                     // Clear local storage and reload page
                     localStorage.removeItem('userId');
+                    localStorage.removeItem('userName');
                     window.location.reload();
                 }
             });
