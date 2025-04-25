@@ -270,14 +270,14 @@ async function fetchFileHashStats() {
                 const filenames = formatArrayField(file.filenames);
                 const descriptions = formatArrayField(file.descriptions);
                 
-                // Create a shortened hash for display (if we have a hash)
+                // Display the full hash without shortening
                 let displayHash = 'Unknown';
                 if (hashField) {
-                    displayHash = `${hashField.substring(0, 8)}...${hashField.substring(hashField.length - 8)}`;
+                    displayHash = hashField;
                 }
                 
                 row.innerHTML = `
-                    <td title="${hashField}">${displayHash}</td>
+                    <td>${displayHash}</td>
                     <td>${file.distinct_id_count || 0}</td>
                     <td>${file.question_hash_count || 0}</td>
                     <td>${questionSets}</td>
@@ -312,6 +312,7 @@ function formatArrayField(arrayField) {
         return 'N/A';
     }
     
+    // Return the full array without shortening
     return filteredArray.join(', ');
 }
 
