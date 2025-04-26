@@ -175,12 +175,12 @@ async function fetchQuestionStats() {
                 const totalAnswers = set.total_answers !== null ? set.total_answers : 0;
                 
                 row.innerHTML = `
-                    <td>${set.question_set}</td>
-                    <td>${set.count}</td>
-                    <td>${totalAnswers}</td>
                     <td>
                         <a href="app.html?qs=${encodeURIComponent(set.question_set)}" class="btn btn-sm btn-primary">Practice</a>
                     </td>
+                    <td>${set.question_set}</td>
+                    <td>${set.count}</td>
+                    <td>${totalAnswers}</td>
                 `;
                 statsTableBody.appendChild(row);
             });
@@ -191,12 +191,12 @@ async function fetchQuestionStats() {
             const totalRow = document.createElement('tr');
             totalRow.className = 'table-secondary';
             totalRow.innerHTML = `
-                <td><strong>Total</strong></td>
-                <td><strong>${totalCount}</strong></td>
-                <td><strong>${totalAnswers}</strong></td>
                 <td>
                     <a href="app.html" class="btn btn-sm btn-outline-primary">Practice All</a>
                 </td>
+                <td><strong>Total</strong></td>
+                <td><strong>${totalCount}</strong></td>
+                <td><strong>${totalAnswers}</strong></td>
             `;
             statsTableBody.appendChild(totalRow);
         }
@@ -277,15 +277,15 @@ async function fetchFileHashStats() {
                 }
                 
                 row.innerHTML = `
+                    <td>
+                        <a href="app.html?fh=${encodeURIComponent(hashField)}" class="btn btn-sm btn-primary">Practice</a>
+                    </td>
                     <td>${displayHash}</td>
                     <td>${file.distinct_id_count || 0}</td>
                     <td>${file.question_hash_count || 0}</td>
                     <td>${questionSets}</td>
                     <td>${filenames}</td>
                     <td>${descriptions}</td>
-                    <td>
-                        <a href="app.html?fh=${encodeURIComponent(hashField)}" class="btn btn-sm btn-primary">Practice</a>
-                    </td>
                 `;
                 fileHashTableBody.appendChild(row);
             });

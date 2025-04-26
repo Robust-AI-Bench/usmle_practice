@@ -127,21 +127,6 @@
                 
                 <div id="alert-container"></div>
                 
-                <div class="mt-4">
-                    <h4>MedQA Schema Format</h4>
-                    <p>Your JSON/JSONL file should contain question objects with the following structure:</p>
-                    <pre class="bg-light p-3 rounded">
-{
-  "question": "What is the most common cause of community-acquired pneumonia?",
-  "options": ["Streptococcus pneumoniae", "Haemophilus influenzae", "Klebsiella", "Legionella"],
-  "answer": "Streptococcus pneumoniae",
-  "answer_idx": 0,
-  "meta_info": "Additional information about the question"
-}
-                    </pre>
-                    <p>For JSONL files, each line should contain a valid JSON object following this schema.</p>
-                </div>
-                
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                     <button type="submit" class="btn btn-primary" id="uploadButton" disabled>Upload Questions</button>
                 </div>
