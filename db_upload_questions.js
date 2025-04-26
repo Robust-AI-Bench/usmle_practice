@@ -132,13 +132,13 @@ async function uploadQuestions(filePath, questionSet) {
         return {
           question_set: questionSet,
           question: q.question,
-          options: typeof q.options === 'string' ? q.options : JSON.stringify(q.options),
+          options: typeof q.options === 'object' ? q.options : JSON.parse(q.options),
           answer: q.answer,
           answer_idx: q.answer_idx,
           question_hash: questionHash,
           meta_info: q.meta_info || null,
           answer_count: 0,
-          extraJ: JSON.stringify(fileMetadata) // Add file metadata to extraJ column
+          extraJ: fileMetadata // Pass object directly, not stringified
         };
       });
       

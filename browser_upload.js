@@ -649,24 +649,26 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
                 const questionObj = {
                     question_set: questionSet,
                     question: q.question,
-                    options: typeof q.options === 'string' ? q.options : JSON.stringify(q.options),
+                    options: typeof q.options === 'object' ? q.options : JSON.parse(q.options),
                     answer: q.answer,
                     answer_idx: q.answer_idx,
                     question_hash: questionHash,
                     meta_info: q.meta_info || null,
                     answer_count: 0,
-                    extraJ: JSON.stringify(fileMetadata), // Add file metadata to extraJ column
+                    extraJ: fileMetadata, // Pass object directly, not stringified
                     src_file_content_hash: fileContentHash  // Add file content hash
                 };
                 
                 // Add 'other' column if present in the source file
                 if (q.other !== undefined) {
-                    questionObj.other = typeof q.other === 'string' ? q.other : JSON.stringify(q.other);
+                    questionObj.other = typeof q.other === 'object' 
+                        ? q.other 
+                        : JSON.parse(q.other);
                 }
                 
                 // Add 'overflow' column if there are unmapped fields
                 if (Object.keys(overflowFields).length > 0) {
-                    questionObj.overflow = JSON.stringify(overflowFields);
+                    questionObj.overflow = overflowFields; // Pass object directly
                 }
                 
                 processedBatch.push(questionObj);
