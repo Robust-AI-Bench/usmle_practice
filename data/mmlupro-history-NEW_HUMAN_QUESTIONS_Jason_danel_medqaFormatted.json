@@ -1,0 +1,1738 @@
+[
+  {
+    "question": "Assuming a constant wading speed, if the relief of Goes began at the midnight hour between the 19th and 20th, and the last Spanish soldier completed the fifteen-mile wade at precisely noon on the 20th, how many total man-miles were covered by the Spanish soldiers in the water before the relief was complete?",
+    "options": {
+      "A": "180 man-miles",
+      "B": "120 man-miles",
+      "C": "45,000 man-miles",
+      "D": "225 man-miles"
+    },
+    "answer_idx": 2,
+    "answer": "180 man-miles",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "6ae9cd3bdd1fb2230c521666d055a00d0cbe5c4fdce07b446bd8363d9cd70e78",
+      "hash_first_sentence": "6ae9cd3bdd1fb2230c521666d055a00d0cbe5c4fdce07b446bd8363d9cd70e78",
+      "hash_first_question_sentence": "6ae9cd3bdd1fb2230c521666d055a00d0cbe5c4fdce07b446bd8363d9cd70e78",
+      "hash_last_sentence": "6ae9cd3bdd1fb2230c521666d055a00d0cbe5c4fdce07b446bd8363d9cd70e78",
+      "stdQuestionUUID": "01966d9d-1c3f-722a-ad75-128d5edbdd11",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 9,
+        "source_event": {
+          "year": "1572",
+          "month": "10",
+          "day": "20",
+          "event": "Eighty Years' War: Three thousand Spanish soldiers wade through fifteen miles of water in one night to effect the relief of Goes."
+        },
+        "generation_timestamp": "2025-04-23T23:17:27.303524",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The total man-miles covered by the Spanish soldiers in the water before the relief was complete is 225 man-miles.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "The question does not provide enough information to determine the total man-miles covered by the Spanish soldiers.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "If each Spanish soldier waded 15 miles, the total man-miles covered equals the number of soldiers multiplied by 15 miles. Since the number of soldiers is not specified in the question, the answer is:\n\n15 × (number of Spanish soldiers) man-miles.",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "6ae9cd3bdd1fb2230c521666d055a00d0cbe5c4fdce07b446bd8363d9cd70e78",
+        "hash_first_sentence": "6ae9cd3bdd1fb2230c521666d055a00d0cbe5c4fdce07b446bd8363d9cd70e78",
+        "hash_first_question_sentence": "6ae9cd3bdd1fb2230c521666d055a00d0cbe5c4fdce07b446bd8363d9cd70e78",
+        "hash_last_sentence": "6ae9cd3bdd1fb2230c521666d055a00d0cbe5c4fdce07b446bd8363d9cd70e78",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-1167a10c3892",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the Pasta de Conchos mine disaster is the sole mining tragedy fitting the provided date, how many full work shifts, presuming an 8-hour shift structure common in mining operations, transpired between the start of February 17th of that year and the moment 65 miners perished in the methane explosion, factoring in the specific day of the week on which the disaster occurred?",
+    "options": {
+      "A": "12 shifts",
+      "B": "3 shifts",
+      "C": "5 shifts",
+      "D": "Five"
+    },
+    "answer_idx": 3,
+    "answer": "12 shifts",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "42b7f991b1de044719ac391afa4381cb6d4b9f54cb4fb5df80c8ddac722c591b",
+      "hash_first_sentence": "42b7f991b1de044719ac391afa4381cb6d4b9f54cb4fb5df80c8ddac722c591b",
+      "hash_first_question_sentence": "42b7f991b1de044719ac391afa4381cb6d4b9f54cb4fb5df80c8ddac722c591b",
+      "hash_last_sentence": "42b7f991b1de044719ac391afa4381cb6d4b9f54cb4fb5df80c8ddac722c591b",
+      "stdQuestionUUID": "01966d9d-1c3f-722a-ad75-1514957181f1",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "2006",
+          "month": "02",
+          "day": "19",
+          "event": "A methane explosion in a coal mine near Nueva Rosita, Mexico, kills 65 miners."
+        },
+        "generation_timestamp": "2025-04-23T23:32:07.024851",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The Pasta de Conchos mine disaster occurred on a Sunday, February 19th. Therefore, there were 3 full work shifts between the start of February 17th and the moment 65 miners perished in the methane explosion.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "This question cannot be answered without specific information about the time of the methane explosion on February 19, 2006, and the day of the week it occurred.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "The Pasta de Conchos mine disaster occurred on Sunday, February 19, 2006. From the start of February 17th to the explosion, 2 full days (February 17 and 18) plus part of February 19 elapsed. That equals 2 days × 3 shifts/day = 6 full 8-hour shifts before the disaster during the early hours of February 19th.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "42b7f991b1de044719ac391afa4381cb6d4b9f54cb4fb5df80c8ddac722c591b",
+        "hash_first_sentence": "42b7f991b1de044719ac391afa4381cb6d4b9f54cb4fb5df80c8ddac722c591b",
+        "hash_first_question_sentence": "42b7f991b1de044719ac391afa4381cb6d4b9f54cb4fb5df80c8ddac722c591b",
+        "hash_last_sentence": "42b7f991b1de044719ac391afa4381cb6d4b9f54cb4fb5df80c8ddac722c591b",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-1655a996f1c4",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the provided date signifies the *start* of the Council of Vienne, what is the maximum number of full days the Council could have been in session before a messenger, dispatched from Vienne on the day immediately following its commencement, could have reached Pope Clement V in Avignon, assuming the messenger traveled at an average speed of 50 kilometers per day and the shortest practical land route between the two cities was approximately 550 kilometers?",
+    "options": {
+      "A": "12",
+      "B": "9",
+      "C": "3",
+      "D": "10 days"
+    },
+    "answer_idx": 3,
+    "answer": "12",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "f8bba48964f9c4d875c7cdf6ee234fdddd2c5128627ef5099514c4b91754d6c8",
+      "hash_first_sentence": "f8bba48964f9c4d875c7cdf6ee234fdddd2c5128627ef5099514c4b91754d6c8",
+      "hash_first_question_sentence": "f8bba48964f9c4d875c7cdf6ee234fdddd2c5128627ef5099514c4b91754d6c8",
+      "hash_last_sentence": "f8bba48964f9c4d875c7cdf6ee234fdddd2c5128627ef5099514c4b91754d6c8",
+      "stdQuestionUUID": "01966d9d-1c3f-722a-ad75-18ad6ad79076",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 9,
+        "source_event": {
+          "year": "1311",
+          "month": "10",
+          "day": "16",
+          "event": "The Council of Vienne convenes for the first time."
+        },
+        "generation_timestamp": "2025-04-23T23:32:30.406878",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The maximum number of full days the Council of Vienne could have been in session before a messenger could have reached Pope Clement V in Avignon is 11 days.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "11 days",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "10 full days",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "f8bba48964f9c4d875c7cdf6ee234fdddd2c5128627ef5099514c4b91754d6c8",
+        "hash_first_sentence": "f8bba48964f9c4d875c7cdf6ee234fdddd2c5128627ef5099514c4b91754d6c8",
+        "hash_first_question_sentence": "f8bba48964f9c4d875c7cdf6ee234fdddd2c5128627ef5099514c4b91754d6c8",
+        "hash_last_sentence": "f8bba48964f9c4d875c7cdf6ee234fdddd2c5128627ef5099514c4b91754d6c8",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-1afc8b6d25d6",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the complete cessation of all ozone-depleting substances covered under the original Montreal Protocol on the date it entered into force, and given that the average atmospheric lifetime of CFC-12 (a major ozone-depleting substance) is 100 years, in what year would the atmospheric concentration of CFC-12 theoretically begin to fall, assuming no illegal production or pre-existing stockpiles continued to leak into the atmosphere after that date?",
+    "options": {
+      "A": "1985",
+      "B": "1989",
+      "C": "2100",
+      "D": "2050"
+    },
+    "answer_idx": 1,
+    "answer": "1985",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "d320d996281cea8ac5b4764a8f9b158e9e667a672f6476638c1c276d6d48c28c",
+      "hash_first_sentence": "d320d996281cea8ac5b4764a8f9b158e9e667a672f6476638c1c276d6d48c28c",
+      "hash_first_question_sentence": "d320d996281cea8ac5b4764a8f9b158e9e667a672f6476638c1c276d6d48c28c",
+      "hash_last_sentence": "d320d996281cea8ac5b4764a8f9b158e9e667a672f6476638c1c276d6d48c28c",
+      "stdQuestionUUID": "01966d9d-1c3f-722a-ad75-1de488577ca8",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 9,
+        "source_event": {
+          "year": "1989",
+          "month": "01",
+          "day": "01",
+          "event": "The Montreal Protocol comes into force, stopping the use of chemicals contributing to ozone depletion."
+        },
+        "generation_timestamp": "2025-04-24T00:01:44.355677",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The atmospheric concentration of CFC-12 would theoretically begin to fall in the year 2087.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "2087",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "1989",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "d320d996281cea8ac5b4764a8f9b158e9e667a672f6476638c1c276d6d48c28c",
+        "hash_first_sentence": "d320d996281cea8ac5b4764a8f9b158e9e667a672f6476638c1c276d6d48c28c",
+        "hash_first_question_sentence": "d320d996281cea8ac5b4764a8f9b158e9e667a672f6476638c1c276d6d48c28c",
+        "hash_last_sentence": "d320d996281cea8ac5b4764a8f9b158e9e667a672f6476638c1c276d6d48c28c",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-1f3f02fcaa8c",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the Gregorian calendar's eventual retrocalculation to the 11th century, what ordinal day of the Julian year saw the crowning of the first Croatian king born in the eleventh century, factoring in the eleven days then separating the two calendars and considering the lack of leap year observance in the Julian calendar for years divisible by 100 but not by 400?",
+    "options": {
+      "A": "245",
+      "B": "67",
+      "C": "282",
+      "D": "310"
+    },
+    "answer_idx": 2,
+    "answer": "245",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "48656fdab475a808b90cff4d71c49c81ebfe7719ce4ed9f481c1dc459a17d3c2",
+      "hash_first_sentence": "48656fdab475a808b90cff4d71c49c81ebfe7719ce4ed9f481c1dc459a17d3c2",
+      "hash_first_question_sentence": "48656fdab475a808b90cff4d71c49c81ebfe7719ce4ed9f481c1dc459a17d3c2",
+      "hash_last_sentence": "48656fdab475a808b90cff4d71c49c81ebfe7719ce4ed9f481c1dc459a17d3c2",
+      "stdQuestionUUID": "01966d9d-1c3f-722a-ad75-20f3234b1979",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1075",
+          "month": "10",
+          "day": "08",
+          "event": "Dmitar Zvonimir is crowned King of Croatia."
+        },
+        "generation_timestamp": "2025-04-24T00:02:53.005999",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The first Croatian king born in the eleventh century was crowned on the 17th day of the Julian year.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "This question cannot be answered without specific historical data such as the exact date of the crowning of the first Croatian king born in the 11th century.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "The 304th day of the Julian year.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "48656fdab475a808b90cff4d71c49c81ebfe7719ce4ed9f481c1dc459a17d3c2",
+        "hash_first_sentence": "48656fdab475a808b90cff4d71c49c81ebfe7719ce4ed9f481c1dc459a17d3c2",
+        "hash_first_question_sentence": "48656fdab475a808b90cff4d71c49c81ebfe7719ce4ed9f481c1dc459a17d3c2",
+        "hash_last_sentence": "48656fdab475a808b90cff4d71c49c81ebfe7719ce4ed9f481c1dc459a17d3c2",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-21d17e15ded1",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the last day of the Later Han dynasty was the eleventh day of the twelfth month of the two hundred and twentieth year, what ordinal number describes the position of this day within the timeframe of Cao Pi's rule as emperor of the state of Wei?",
+    "options": {
+      "A": "584th day",
+      "B": "First",
+      "C": "1036th day",
+      "D": "365th day"
+    },
+    "answer_idx": 1,
+    "answer": "584th day",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "f8e909a72926afa6350a436ded6003bd3eaa6273634fff608376bd63a0493880",
+      "hash_first_sentence": "f8e909a72926afa6350a436ded6003bd3eaa6273634fff608376bd63a0493880",
+      "hash_first_question_sentence": "f8e909a72926afa6350a436ded6003bd3eaa6273634fff608376bd63a0493880",
+      "hash_last_sentence": "f8e909a72926afa6350a436ded6003bd3eaa6273634fff608376bd63a0493880",
+      "stdQuestionUUID": "01966d9d-1c3f-722a-ad75-2541926016d6",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 9,
+        "source_event": {
+          "year": "220",
+          "month": "12",
+          "day": "11",
+          "event": "Emperor Xian of Han is forced to abdicate the throne by Cao Cao's son Cao Pi, ending the Han dynasty."
+        },
+        "generation_timestamp": "2025-04-24T00:03:01.637229",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The ordinal number that describes the position of the last day of the Later Han dynasty within the timeframe of Cao Pi's rule as emperor of the state of Wei is the 13th day.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "This information cannot be determined based on general knowledge as it requires specific historical data and calculations.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "First.",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "f8e909a72926afa6350a436ded6003bd3eaa6273634fff608376bd63a0493880",
+        "hash_first_sentence": "f8e909a72926afa6350a436ded6003bd3eaa6273634fff608376bd63a0493880",
+        "hash_first_question_sentence": "f8e909a72926afa6350a436ded6003bd3eaa6273634fff608376bd63a0493880",
+        "hash_last_sentence": "f8e909a72926afa6350a436ded6003bd3eaa6273634fff608376bd63a0493880",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-245f39dd8748",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Prior to the \"soft power\" initiative undertaken in the capital of the Democratic People's Republic of Korea involving a renowned New York-based orchestra, how many full calendar years had passed since the Korean Armistice Agreement went into effect, bringing a cessation of open hostilities in the Korean Peninsula?",
+    "options": {
+      "A": "65",
+      "B": "62",
+      "C": "59",
+      "D": "54"
+    },
+    "answer_idx": 3,
+    "answer": "65",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "d279367827377b8327743c25f03bfb21a48089c5246936359d12ed0b80f57f76",
+      "hash_first_sentence": "d279367827377b8327743c25f03bfb21a48089c5246936359d12ed0b80f57f76",
+      "hash_first_question_sentence": "d279367827377b8327743c25f03bfb21a48089c5246936359d12ed0b80f57f76",
+      "hash_last_sentence": "d279367827377b8327743c25f03bfb21a48089c5246936359d12ed0b80f57f76",
+      "stdQuestionUUID": "01966d9d-1c3f-722a-ad75-2999fd64d498",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 8,
+        "source_event": {
+          "year": "2008",
+          "month": "02",
+          "day": "26",
+          "event": "The New York Philharmonic performs in Pyongyang, North Korea; this is the first event of its kind to take place in North Korea."
+        },
+        "generation_timestamp": "2025-04-24T00:03:10.117301",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "67 years.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "55 years",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "54 years",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "d279367827377b8327743c25f03bfb21a48089c5246936359d12ed0b80f57f76",
+        "hash_first_sentence": "d279367827377b8327743c25f03bfb21a48089c5246936359d12ed0b80f57f76",
+        "hash_first_question_sentence": "d279367827377b8327743c25f03bfb21a48089c5246936359d12ed0b80f57f76",
+        "hash_last_sentence": "d279367827377b8327743c25f03bfb21a48089c5246936359d12ed0b80f57f76",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-28145fa9addc",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming a direct descendant of Dmitar Zvonimir became the King of Croatia exactly 250 years after his ancestor's coronation, in what century would this hypothetical monarch have begun his reign?",
+    "options": {
+      "A": "15th century",
+      "B": "18th century",
+      "C": "14th century",
+      "D": "12th century"
+    },
+    "answer_idx": 2,
+    "answer": "15th century",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "fa7d3c2002a42332d7568cd2dad6ec6b2e35829a74cc098ccdb2962e0b172bf1",
+      "hash_first_sentence": "fa7d3c2002a42332d7568cd2dad6ec6b2e35829a74cc098ccdb2962e0b172bf1",
+      "hash_first_question_sentence": "fa7d3c2002a42332d7568cd2dad6ec6b2e35829a74cc098ccdb2962e0b172bf1",
+      "hash_last_sentence": "fa7d3c2002a42332d7568cd2dad6ec6b2e35829a74cc098ccdb2962e0b172bf1",
+      "stdQuestionUUID": "01966d9d-1c3f-722a-ad75-2f63f5e5d8a0",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1075",
+          "month": "10",
+          "day": "08",
+          "event": "Dmitar Zvonimir is crowned King of Croatia."
+        },
+        "generation_timestamp": "2025-04-24T00:03:17.249766",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "16th century",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "12th century",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "15th century",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "fa7d3c2002a42332d7568cd2dad6ec6b2e35829a74cc098ccdb2962e0b172bf1",
+        "hash_first_sentence": "fa7d3c2002a42332d7568cd2dad6ec6b2e35829a74cc098ccdb2962e0b172bf1",
+        "hash_first_question_sentence": "fa7d3c2002a42332d7568cd2dad6ec6b2e35829a74cc098ccdb2962e0b172bf1",
+        "hash_last_sentence": "fa7d3c2002a42332d7568cd2dad6ec6b2e35829a74cc098ccdb2962e0b172bf1",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-2c98c4dcc9f0",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Considering the first formal diplomatic recognition between Great Britain and the governing power in Moscow after the collapse of the Tsarist regime occurred in February 1924, how many full calendar years had elapsed since the Bolsheviks seized power in the Julian calendar, factoring in the difference between the Julian and Gregorian calendars at that point in time?",
+    "options": {
+      "A": "7",
+      "B": "Six years",
+      "C": "8",
+      "D": "4"
+    },
+    "answer_idx": 1,
+    "answer": "7",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "82d24e680e5811de5b4d5f5b71fe8bc0e164247cc6c3c10ff182aa8227a4ab05",
+      "hash_first_sentence": "82d24e680e5811de5b4d5f5b71fe8bc0e164247cc6c3c10ff182aa8227a4ab05",
+      "hash_first_question_sentence": "82d24e680e5811de5b4d5f5b71fe8bc0e164247cc6c3c10ff182aa8227a4ab05",
+      "hash_last_sentence": "82d24e680e5811de5b4d5f5b71fe8bc0e164247cc6c3c10ff182aa8227a4ab05",
+      "stdQuestionUUID": "01966d9d-1c3f-722a-ad75-32b83e132cbd",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 7,
+        "source_event": {
+          "year": "1924",
+          "month": "02",
+          "day": "01",
+          "event": "Russia-United Kingdom relations are restored, over six years after the Communist revolution."
+        },
+        "generation_timestamp": "2025-04-24T00:23:19.201636",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "Seven full calendar years had elapsed since the Bolsheviks seized power in the Julian calendar, factoring in the difference between the Julian and Gregorian calendars at that point in time.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "6 years",
+            "correct": true
+          },
+          "gpt-4.1": {
+            "answer": "Six full calendar years.",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "82d24e680e5811de5b4d5f5b71fe8bc0e164247cc6c3c10ff182aa8227a4ab05",
+        "hash_first_sentence": "82d24e680e5811de5b4d5f5b71fe8bc0e164247cc6c3c10ff182aa8227a4ab05",
+        "hash_first_question_sentence": "82d24e680e5811de5b4d5f5b71fe8bc0e164247cc6c3c10ff182aa8227a4ab05",
+        "hash_last_sentence": "82d24e680e5811de5b4d5f5b71fe8bc0e164247cc6c3c10ff182aa8227a4ab05",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-31ad1f4ae066",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Following the defeat of a combined ducal uprising against the sovereign crowned at Aachen six years prior, how many full calendar years had elapsed between the commencement of the Ottonian dynasty and the decisive military engagement near the Roman frontier fortress of Antunnacum?",
+    "options": {
+      "A": "17",
+      "B": "6",
+      "C": "23",
+      "D": "31"
+    },
+    "answer_idx": 1,
+    "answer": "17",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "77d05a39f2676e0e8cebca041465de190925f10ec8b21a67b29a5f99c5201eb3",
+      "hash_first_sentence": "77d05a39f2676e0e8cebca041465de190925f10ec8b21a67b29a5f99c5201eb3",
+      "hash_first_question_sentence": "77d05a39f2676e0e8cebca041465de190925f10ec8b21a67b29a5f99c5201eb3",
+      "hash_last_sentence": "77d05a39f2676e0e8cebca041465de190925f10ec8b21a67b29a5f99c5201eb3",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-37d44e0872bc",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "939",
+          "month": "10",
+          "day": "02",
+          "event": "Battle of Andernach: Otto I, Holy Roman Emperor, crushes a rebellion against his rule, by a coalition of Eberhard of Franconia and other Frankish dukes."
+        },
+        "generation_timestamp": "2025-04-24T00:24:24.288535",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "31 years",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "This question cannot be answered accurately without specific dates or events. The Ottonian Dynasty, the crowning at Aachen, the ducal uprising, and the battle near Antunnacum need to be specified in order to calculate the number of years.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "56 years.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "77d05a39f2676e0e8cebca041465de190925f10ec8b21a67b29a5f99c5201eb3",
+        "hash_first_sentence": "77d05a39f2676e0e8cebca041465de190925f10ec8b21a67b29a5f99c5201eb3",
+        "hash_first_question_sentence": "77d05a39f2676e0e8cebca041465de190925f10ec8b21a67b29a5f99c5201eb3",
+        "hash_last_sentence": "77d05a39f2676e0e8cebca041465de190925f10ec8b21a67b29a5f99c5201eb3",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-374cda9c8bff",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the generally accepted 12-year reign of Genghis Khan's successor, if a traveler departed on horseback from Karakorum towards the Ilkhanate on the day Ögedei was proclaimed Khagan, realistically arriving approximately one month later, in what Gregorian calendar year would a message confirming the traveler's arrival have likely reached the court of the newly proclaimed Khagan, considering typical communication speeds of the era?",
+    "options": {
+      "A": "1230",
+      "B": "1230",
+      "C": "1237",
+      "D": "1229"
+    },
+    "answer_idx": 0,
+    "answer": "1230",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "884095f73ccf3752b7da87e02ab3fafca5ace83c2fc7fffb650b715e8eb13d8e",
+      "hash_first_sentence": "884095f73ccf3752b7da87e02ab3fafca5ace83c2fc7fffb650b715e8eb13d8e",
+      "hash_first_question_sentence": "884095f73ccf3752b7da87e02ab3fafca5ace83c2fc7fffb650b715e8eb13d8e",
+      "hash_last_sentence": "884095f73ccf3752b7da87e02ab3fafca5ace83c2fc7fffb650b715e8eb13d8e",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-3902e0758014",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1229",
+          "month": "09",
+          "day": "13",
+          "event": "Ögedei Khan is proclaimed Khagan of the Mongol Empire in Kodoe Aral, Khentii: Mongolia."
+        },
+        "generation_timestamp": "2025-04-24T00:24:48.118964",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The message confirming the traveler's arrival would likely have reached the court of the newly proclaimed Khagan in the Gregorian calendar year of 1242.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "1229",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "1229",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "884095f73ccf3752b7da87e02ab3fafca5ace83c2fc7fffb650b715e8eb13d8e",
+        "hash_first_sentence": "884095f73ccf3752b7da87e02ab3fafca5ace83c2fc7fffb650b715e8eb13d8e",
+        "hash_first_question_sentence": "884095f73ccf3752b7da87e02ab3fafca5ace83c2fc7fffb650b715e8eb13d8e",
+        "hash_last_sentence": "884095f73ccf3752b7da87e02ab3fafca5ace83c2fc7fffb650b715e8eb13d8e",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-3ab1edcfd3eb",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "On Christmas Day of the year a certain conquistador met his end at the hands of an indigenous rebellion, how many years had elapsed since Martin Luther famously posted his Ninety-Five Theses initiating the Protestant Reformation?",
+    "options": {
+      "A": "27 years",
+      "B": "112 years",
+      "C": "83 years",
+      "D": "37"
+    },
+    "answer_idx": 3,
+    "answer": "27 years",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "7b12f1c714049a1ec820684f3aab37e46d55b542e5a46aad80c6d81faf78403d",
+      "hash_first_sentence": "7b12f1c714049a1ec820684f3aab37e46d55b542e5a46aad80c6d81faf78403d",
+      "hash_first_question_sentence": "7b12f1c714049a1ec820684f3aab37e46d55b542e5a46aad80c6d81faf78403d",
+      "hash_last_sentence": "7b12f1c714049a1ec820684f3aab37e46d55b542e5a46aad80c6d81faf78403d",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-3c6d887dd8cc",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1553",
+          "month": "12",
+          "day": "25",
+          "event": "Battle of Tucapel: Mapuche rebels under Lautaro defeat the Spanish conquistadors and executes the governor of Chile, Pedro de Valdivia."
+        },
+        "generation_timestamp": "2025-04-24T00:25:08.153285",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "48 years",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "The conquistador referred to is likely Francisco Pizarro, who was killed by an indigenous rebellion on June 26, 1541. Martin Luther posted his Ninety-Five Theses on October 31, 1517. Therefore, 24 years had elapsed.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "46 years.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "7b12f1c714049a1ec820684f3aab37e46d55b542e5a46aad80c6d81faf78403d",
+        "hash_first_sentence": "7b12f1c714049a1ec820684f3aab37e46d55b542e5a46aad80c6d81faf78403d",
+        "hash_first_question_sentence": "7b12f1c714049a1ec820684f3aab37e46d55b542e5a46aad80c6d81faf78403d",
+        "hash_last_sentence": "7b12f1c714049a1ec820684f3aab37e46d55b542e5a46aad80c6d81faf78403d",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-3fd77411b5ab",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Following the death of a West Frankish king in battle against a Duke vying for the throne, his Carolingian successor was captured by the Duke's supporters.  Assuming no regnal numbering discrepancies exist between the deceased king and his immediate predecessor of the same name, how many West Frankish kings named \"Robert\" had reigned *before* the battle in question?",
+    "options": {
+      "A": "Zero",
+      "B": "3",
+      "C": "1",
+      "D": "5"
+    },
+    "answer_idx": 0,
+    "answer": "Zero",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "b4c92c663e0e7b7cbf407f22f3b7f5bc64f9f73e34c1f663250436cd66418cce",
+      "hash_first_sentence": "f12f5af392a7dff2d41210f9175d4a52f95568a2a12d446ba0b4c9ab31390ca2",
+      "hash_first_question_sentence": "27630c0dde0c15afde0c1603e395c819565f0bdcadfb4228ada382024c49aaa8",
+      "hash_last_sentence": "27630c0dde0c15afde0c1603e395c819565f0bdcadfb4228ada382024c49aaa8",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-424c25ce36c2",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 9,
+        "source_event": {
+          "year": "0923",
+          "month": "06",
+          "day": "15",
+          "event": "Battle of Soissons: King Robert I of France is killed and King Charles the Simple is arrested by the supporters of Duke Rudolph of Burgundy."
+        },
+        "generation_timestamp": "2025-04-24T00:25:15.932077",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "Three West Frankish kings named \"Robert\" had reigned before the battle in question.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "1",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "Zero.",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "b4c92c663e0e7b7cbf407f22f3b7f5bc64f9f73e34c1f663250436cd66418cce",
+        "hash_first_sentence": "f12f5af392a7dff2d41210f9175d4a52f95568a2a12d446ba0b4c9ab31390ca2",
+        "hash_first_question_sentence": "27630c0dde0c15afde0c1603e395c819565f0bdcadfb4228ada382024c49aaa8",
+        "hash_last_sentence": "27630c0dde0c15afde0c1603e395c819565f0bdcadfb4228ada382024c49aaa8",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-408cdab311a1",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the Julian calendar, within what fortnight of the year 1387 did the victorious forces, commanded by a famed English captain whose given name shares its spelling with a bird of prey, secure their triumph over the Veronese?",
+    "options": {
+      "A": "First fortnight of August",
+      "B": "Second fortnight of March.",
+      "C": "First fortnight of March",
+      "D": "Second fortnight of June"
+    },
+    "answer_idx": 1,
+    "answer": "First fortnight of August",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "dda87e63b2a4f29019c803985cac76ccbcb8bb36b6b1d9f433dcd0f4fd6ffa4a",
+      "hash_first_sentence": "dda87e63b2a4f29019c803985cac76ccbcb8bb36b6b1d9f433dcd0f4fd6ffa4a",
+      "hash_first_question_sentence": "dda87e63b2a4f29019c803985cac76ccbcb8bb36b6b1d9f433dcd0f4fd6ffa4a",
+      "hash_last_sentence": "dda87e63b2a4f29019c803985cac76ccbcb8bb36b6b1d9f433dcd0f4fd6ffa4a",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-46f1114e041d",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1387",
+          "month": "03",
+          "day": "11",
+          "event": "Battle of Castagnaro: Padua, led by John Hawkwood, is victorious over Giovanni Ordelaffi of Verona."
+        },
+        "generation_timestamp": "2025-04-24T00:25:26.948425",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The victorious forces secured their triumph over the Veronese within the second fortnight of the year 1387, commanded by the famed English captain named Hawkwood.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "The victory over the Veronese was secured in the fortnight beginning on the 9th of August, 1387.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "The first fortnight of April 1387.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "dda87e63b2a4f29019c803985cac76ccbcb8bb36b6b1d9f433dcd0f4fd6ffa4a",
+        "hash_first_sentence": "dda87e63b2a4f29019c803985cac76ccbcb8bb36b6b1d9f433dcd0f4fd6ffa4a",
+        "hash_first_question_sentence": "dda87e63b2a4f29019c803985cac76ccbcb8bb36b6b1d9f433dcd0f4fd6ffa4a",
+        "hash_last_sentence": "dda87e63b2a4f29019c803985cac76ccbcb8bb36b6b1d9f433dcd0f4fd6ffa4a",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-4534c5de6681",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Prior to the millennium, within a decade of the Magyar incursions ceasing to regularly threaten Western Europe, a prominent figure of the Ottonian Renaissance achieved a significant posthumous ecclesiastical honor.  Assuming this individual's elevation occurred on the earliest possible date given these constraints, how many days remained in that year following this event?",
+    "options": {
+      "A": "275",
+      "B": "180",
+      "C": "300",
+      "D": "182"
+    },
+    "answer_idx": 1,
+    "answer": "275",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "4ab2199fef90dda2b6ea2d21a8bc0dd59619b30b438839ae7d60a955a3b7677e",
+      "hash_first_sentence": "611cf372e867fce065d4a87b96b8af47eb78781c6e853ad3c92e9a2128164f82",
+      "hash_first_question_sentence": "87bc4c00dbc845e8bf0e634bf685a74b1ec9271856fb062118aad40155a7b368",
+      "hash_last_sentence": "87bc4c00dbc845e8bf0e634bf685a74b1ec9271856fb062118aad40155a7b368",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-4832992f52e6",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "0993",
+          "month": "07",
+          "day": "04",
+          "event": "Ulrich of Augsburg is canonized as a saint."
+        },
+        "generation_timestamp": "2025-04-24T00:32:33.574250",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "There were 10 days remaining in the year following this event.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "365",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "There were 61 days remaining in that year.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "4ab2199fef90dda2b6ea2d21a8bc0dd59619b30b438839ae7d60a955a3b7677e",
+        "hash_first_sentence": "611cf372e867fce065d4a87b96b8af47eb78781c6e853ad3c92e9a2128164f82",
+        "hash_first_question_sentence": "87bc4c00dbc845e8bf0e634bf685a74b1ec9271856fb062118aad40155a7b368",
+        "hash_last_sentence": "87bc4c00dbc845e8bf0e634bf685a74b1ec9271856fb062118aad40155a7b368",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-4b12b5f45599",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming a contemporaneous observer noted the Huaynaputina eruption’s commencement precisely at noon, and given that the resulting atmospheric sulfate concentration spike—which depressed global temperatures and disrupted Russian harvests, contributing to the Time of Troubles—peaked approximately two years later, in what month of what Julian calendar year did the effects of this South American geophysical event likely exert their most significant influence on the sociopolitical trajectory of Muscovy?",
+    "options": {
+      "A": "November 1601",
+      "B": "January 1602",
+      "C": "August 1603",
+      "D": "February 1602"
+    },
+    "answer_idx": 3,
+    "answer": "November 1601",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "43dc9c2655949fb6e61ab42dc99b448e311b451e2886cc34d93b01afcd90f7dc",
+      "hash_first_sentence": "43dc9c2655949fb6e61ab42dc99b448e311b451e2886cc34d93b01afcd90f7dc",
+      "hash_first_question_sentence": "43dc9c2655949fb6e61ab42dc99b448e311b451e2886cc34d93b01afcd90f7dc",
+      "hash_last_sentence": "43dc9c2655949fb6e61ab42dc99b448e311b451e2886cc34d93b01afcd90f7dc",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-4f0107777366",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1600",
+          "month": "02",
+          "day": "19",
+          "event": "The Peruvian stratovolcano Huaynaputina explodes in the most violent eruption in the recorded history of South America."
+        },
+        "generation_timestamp": "2025-04-24T00:33:02.733845",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The effects of the Huaynaputina eruption likely exerted their most significant influence on the sociopolitical trajectory of Muscovy in the month of June of the year 1601.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "February 1601",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "March 1602",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "43dc9c2655949fb6e61ab42dc99b448e311b451e2886cc34d93b01afcd90f7dc",
+        "hash_first_sentence": "43dc9c2655949fb6e61ab42dc99b448e311b451e2886cc34d93b01afcd90f7dc",
+        "hash_first_question_sentence": "43dc9c2655949fb6e61ab42dc99b448e311b451e2886cc34d93b01afcd90f7dc",
+        "hash_last_sentence": "43dc9c2655949fb6e61ab42dc99b448e311b451e2886cc34d93b01afcd90f7dc",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-4c6cbc4278cc",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Prior to the formal recognition of the \"Little Brothers\" spurred by the anxieties of the Albigensian Crusade, a different mendicant order received papal sanction with a bull referencing the universal Church.  Assuming this latter bull was promulgated on the fourth day of the fifth month of its respective year, how many years transpired between the Lateran IV council’s decree *volentes* and this distinct mendicant order's official constitution?",
+    "options": {
+      "A": "13",
+      "B": "12",
+      "C": "42",
+      "D": "27"
+    },
+    "answer_idx": 0,
+    "answer": "13",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "1bda8941236c4797193ebe478ed9902db62e03a12f7bc85bef38813913062919",
+      "hash_first_sentence": "92c78cef28b5194ec9715745b3ee8130ea116f490c7d8a46d83824ae3b2d706f",
+      "hash_first_question_sentence": "760e6fbeeadce0718a24b78d4ee78239c55c99de7305b44722dea6b3ead9c727",
+      "hash_last_sentence": "760e6fbeeadce0718a24b78d4ee78239c55c99de7305b44722dea6b3ead9c727",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-5095448e7a85",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1256",
+          "month": "05",
+          "day": "04",
+          "event": "The Augustinian monastic order is constituted at the Lecceto Monastery when Pope Alexander IV issues a papal bull Licet ecclesiae catholicae."
+        },
+        "generation_timestamp": "2025-04-24T00:48:24.141785",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "Approximately 9 years.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "The information provided is not sufficient to determine the exact number of years that transpired between the Lateran IV council’s decree *volentes* and the official constitution of a distinct mendicant order.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "6 years",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "1bda8941236c4797193ebe478ed9902db62e03a12f7bc85bef38813913062919",
+        "hash_first_sentence": "92c78cef28b5194ec9715745b3ee8130ea116f490c7d8a46d83824ae3b2d706f",
+        "hash_first_question_sentence": "760e6fbeeadce0718a24b78d4ee78239c55c99de7305b44722dea6b3ead9c727",
+        "hash_last_sentence": "760e6fbeeadce0718a24b78d4ee78239c55c99de7305b44722dea6b3ead9c727",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-52aa84ce1e03",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the Julian calendar remained in effect without interruption, how many days after the birth of the mystic whose visions of divine love commenced on the eighth day of the fifth month of the 1373rd year since the traditionally reckoned birth year of Christ would the sixth anniversary of her deathbed revelations occur, given that she lived for at least six further years following these visions?",
+    "options": {
+      "A": "2025",
+      "B": "2110",
+      "C": "2190",
+      "D": "2191"
+    },
+    "answer_idx": 2,
+    "answer": "2025",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "87ab70b35c6765ed38634e979e8bf193e442abcb8446d3e5520fc8c7fb77b876",
+      "hash_first_sentence": "87ab70b35c6765ed38634e979e8bf193e442abcb8446d3e5520fc8c7fb77b876",
+      "hash_first_question_sentence": "87ab70b35c6765ed38634e979e8bf193e442abcb8446d3e5520fc8c7fb77b876",
+      "hash_last_sentence": "87ab70b35c6765ed38634e979e8bf193e442abcb8446d3e5520fc8c7fb77b876",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-57317e2567bc",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1373",
+          "month": "05",
+          "day": "08",
+          "event": "Julian of Norwich, a Christian mystic and anchoress, experiences the deathbed visions described in her Revelations of Divine Love."
+        },
+        "generation_timestamp": "2025-04-24T00:48:32.478596",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The sixth anniversary of her deathbed revelations would occur 2191 days after the birth of the mystic.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "2192 days",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "2,192 days",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "87ab70b35c6765ed38634e979e8bf193e442abcb8446d3e5520fc8c7fb77b876",
+        "hash_first_sentence": "87ab70b35c6765ed38634e979e8bf193e442abcb8446d3e5520fc8c7fb77b876",
+        "hash_first_question_sentence": "87ab70b35c6765ed38634e979e8bf193e442abcb8446d3e5520fc8c7fb77b876",
+        "hash_last_sentence": "87ab70b35c6765ed38634e979e8bf193e442abcb8446d3e5520fc8c7fb77b876",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-5793235d34fd",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Prior to the first documented naval use of gunpowder artillery, a  European power decisively won a naval engagement that initiated a protracted continental conflict lasting more than a century.  Within a decade of this engagement, what calendar year saw the commencement of the use of cannons in naval warfare?",
+    "options": {
+      "A": "1380",
+      "B": "1410",
+      "C": "1338",
+      "D": "1345"
+    },
+    "answer_idx": 2,
+    "answer": "1380",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "00a54183ce8bb8db5eca16e2dcca151adeb0858185bfb62c7d3e3fcd26647218",
+      "hash_first_sentence": "4b539f09acb6d001c7ac73dd7b60ff03fc38f287ad8ad592c063add6c0f524ce",
+      "hash_first_question_sentence": "f891db81c4f1c1c2ec7e21c44c8527048fb043e4bcfd1b9a23cab14f3b757919",
+      "hash_last_sentence": "f891db81c4f1c1c2ec7e21c44c8527048fb043e4bcfd1b9a23cab14f3b757919",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-58cb477456b4",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 8,
+        "source_event": {
+          "year": "1338",
+          "month": "09",
+          "day": "23",
+          "event": "The Battle of Arnemuiden, in which a French force defeats the English, is the first naval battle of the Hundred Years' War and the first naval battle in which gunpowder artillery is used."
+        },
+        "generation_timestamp": "2025-04-24T00:49:27.505319",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The year 1326 saw the commencement of the use of cannons in naval warfare.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "1324",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "1338",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "00a54183ce8bb8db5eca16e2dcca151adeb0858185bfb62c7d3e3fcd26647218",
+        "hash_first_sentence": "4b539f09acb6d001c7ac73dd7b60ff03fc38f287ad8ad592c063add6c0f524ce",
+        "hash_first_question_sentence": "f891db81c4f1c1c2ec7e21c44c8527048fb043e4bcfd1b9a23cab14f3b757919",
+        "hash_last_sentence": "f891db81c4f1c1c2ec7e21c44c8527048fb043e4bcfd1b9a23cab14f3b757919",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-58d1c7acedf7",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the Plymouth Colony adhered to the Julian calendar then in use in England, within what range of numbered days of the *Gregorian* calendar year 1624 did the establishment of the twelve-man jury system in the American colonies fall?",
+    "options": {
+      "A": "March 25-April 7, 1624",
+      "B": "June 10-24, 1624",
+      "C": "January 1-15, 1624",
+      "D": "December 23-24, 1623"
+    },
+    "answer_idx": 3,
+    "answer": "March 25-April 7, 1624",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "3f72c85efa7eddda5ca0b872ba1d60b28357abd8c3286bd3823362b4255a4041",
+      "hash_first_sentence": "3f72c85efa7eddda5ca0b872ba1d60b28357abd8c3286bd3823362b4255a4041",
+      "hash_first_question_sentence": "3f72c85efa7eddda5ca0b872ba1d60b28357abd8c3286bd3823362b4255a4041",
+      "hash_last_sentence": "3f72c85efa7eddda5ca0b872ba1d60b28357abd8c3286bd3823362b4255a4041",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-5dcfa29d8644",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1623",
+          "month": "12",
+          "day": "13",
+          "event": "The Plymouth Colony establishes the system of trial by 12-men jury in the American colonies."
+        },
+        "generation_timestamp": "2025-04-24T00:50:03.943637",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The establishment of the twelve-man jury system in the American colonies in the Plymouth Colony would have fallen within the range of numbered days from January 1 to March 24 of the Gregorian calendar year 1624.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "The Plymouth Colony established the twelve-man jury system on December 18, 1620, according to the Julian calendar. However, the Julian calendar was 10 days behind the Gregorian calendar in the 17th century. Therefore, the establishment of the jury system would fall on December 28, 1620, in the Gregorian calendar.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "The establishment of the twelve-man jury system in Plymouth Colony occurred on January 17, 1624 (Julian), which corresponds to January 27, 1624 (Gregorian), so it fell on day 27 of the Gregorian calendar year 1624.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "3f72c85efa7eddda5ca0b872ba1d60b28357abd8c3286bd3823362b4255a4041",
+        "hash_first_sentence": "3f72c85efa7eddda5ca0b872ba1d60b28357abd8c3286bd3823362b4255a4041",
+        "hash_first_question_sentence": "3f72c85efa7eddda5ca0b872ba1d60b28357abd8c3286bd3823362b4255a4041",
+        "hash_last_sentence": "3f72c85efa7eddda5ca0b872ba1d60b28357abd8c3286bd3823362b4255a4041",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-5ccbe173bbb0",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the immediate successor of Lucius held the highest office in the Roman Church uninterrupted for a full standard term, during what month would the combined reigns of the 22nd and 23rd Popes have exceeded 2750 days, if the 22nd Pope's papacy began on June 25, 249?",
+    "options": {
+      "A": "October",
+      "B": "April",
+      "C": "December",
+      "D": "February"
+    },
+    "answer_idx": 3,
+    "answer": "October",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "c3b6946213304687d7963e1aa9f96fa8bb3c9adf3da4b5bae5c1d28ebafd102e",
+      "hash_first_sentence": "c3b6946213304687d7963e1aa9f96fa8bb3c9adf3da4b5bae5c1d28ebafd102e",
+      "hash_first_question_sentence": "c3b6946213304687d7963e1aa9f96fa8bb3c9adf3da4b5bae5c1d28ebafd102e",
+      "hash_last_sentence": "c3b6946213304687d7963e1aa9f96fa8bb3c9adf3da4b5bae5c1d28ebafd102e",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-61858276e516",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "254",
+          "month": "05",
+          "day": "12",
+          "event": "Pope Stephen I succeeds Pope Lucius I, becoming the 23rd pope of the Catholic Church, and immediately takes a stand against Novatianism."
+        },
+        "generation_timestamp": "2025-04-24T00:50:10.885630",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The combined reigns of the 22nd and 23rd Popes would have exceeded 2750 days in August.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "November 259",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "April",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "c3b6946213304687d7963e1aa9f96fa8bb3c9adf3da4b5bae5c1d28ebafd102e",
+        "hash_first_sentence": "c3b6946213304687d7963e1aa9f96fa8bb3c9adf3da4b5bae5c1d28ebafd102e",
+        "hash_first_question_sentence": "c3b6946213304687d7963e1aa9f96fa8bb3c9adf3da4b5bae5c1d28ebafd102e",
+        "hash_last_sentence": "c3b6946213304687d7963e1aa9f96fa8bb3c9adf3da4b5bae5c1d28ebafd102e",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-6282ec547c56",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Prior to entering monastic life and assuming the name Athanasius, a Byzantine emperor relinquished his throne in the year 813 CE.  Assuming a standard Gregorian calendar system and a conventional seven-day week structure, on what day of the week did this emperor's successor formally assume power, if the former emperor's abdication was finalized on the eleventh day of the seventh month?",
+    "options": {
+      "A": "Thursday",
+      "B": "Saturday",
+      "C": "Tuesday",
+      "D": "Sunday"
+    },
+    "answer_idx": 3,
+    "answer": "Thursday",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "a3af7e74327fdfd174be1287c353bfb4aba1f82ffd4bf511ae87ffd6918b7163",
+      "hash_first_sentence": "b6021270bcceb0e40115d70264579ba556436fd6a0c4b9cd1245835d2c924de7",
+      "hash_first_question_sentence": "59c8e41a82707cd78040f2bf7c1faf5ae3633403abdf42bd93e4170d2702d74b",
+      "hash_last_sentence": "59c8e41a82707cd78040f2bf7c1faf5ae3633403abdf42bd93e4170d2702d74b",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-65e8e646cde8",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "813",
+          "month": "07",
+          "day": "11",
+          "event": "Byzantine emperor Michael I, under threat by conspiracies, abdicates in favor of his general Leo the Armenian, and becomes a monk (under the name Athanasius)."
+        },
+        "generation_timestamp": "2025-04-24T01:03:09.827556",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "Monday",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "The specific day of the week cannot be determined based on the information provided.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "Monday",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "a3af7e74327fdfd174be1287c353bfb4aba1f82ffd4bf511ae87ffd6918b7163",
+        "hash_first_sentence": "b6021270bcceb0e40115d70264579ba556436fd6a0c4b9cd1245835d2c924de7",
+        "hash_first_question_sentence": "59c8e41a82707cd78040f2bf7c1faf5ae3633403abdf42bd93e4170d2702d74b",
+        "hash_last_sentence": "59c8e41a82707cd78040f2bf7c1faf5ae3633403abdf42bd93e4170d2702d74b",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-64906697a545",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the success of the 28th of September, if a loyalist commander outside Constantinople learned of the usurpation on the Kalends of October and immediately began marching his legions toward the capital, averaging 25 Roman miles per day, on what date would he arrive at Nicomedia, presuming the distance by road to be approximately 600 stadia?",
+    "options": {
+      "A": "6th of October",
+      "B": "12th of October",
+      "C": "8th of October",
+      "D": "October 9th"
+    },
+    "answer_idx": 3,
+    "answer": "6th of October",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "2b879b35cf9178cce0d21fbfa7fc094f159e33887ef509ae0f5322241bc5111b",
+      "hash_first_sentence": "2b879b35cf9178cce0d21fbfa7fc094f159e33887ef509ae0f5322241bc5111b",
+      "hash_first_question_sentence": "2b879b35cf9178cce0d21fbfa7fc094f159e33887ef509ae0f5322241bc5111b",
+      "hash_last_sentence": "2b879b35cf9178cce0d21fbfa7fc094f159e33887ef509ae0f5322241bc5111b",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-69f10b21db67",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "365",
+          "month": "09",
+          "day": "28",
+          "event": "Roman usurper Procopius bribes two legions passing by Constantinople, and proclaims himself emperor."
+        },
+        "generation_timestamp": "2025-04-24T01:04:16.102229",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The loyalist commander would arrive at Nicomedia on the 5th of October.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "The loyalist commander would arrive at Nicomedia on the 6th of October.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "He would arrive at Nicomedia on the 4th of October.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "2b879b35cf9178cce0d21fbfa7fc094f159e33887ef509ae0f5322241bc5111b",
+        "hash_first_sentence": "2b879b35cf9178cce0d21fbfa7fc094f159e33887ef509ae0f5322241bc5111b",
+        "hash_first_question_sentence": "2b879b35cf9178cce0d21fbfa7fc094f159e33887ef509ae0f5322241bc5111b",
+        "hash_last_sentence": "2b879b35cf9178cce0d21fbfa7fc094f159e33887ef509ae0f5322241bc5111b",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-6bdb1d64dd6c",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Following the Crusader defeat at a battle in the year 1164 CE against a Muslim commander whose name means \"Light of the Religion\", what political entity, geographically located between the defeated forces, likely experienced heightened concern for its own security in the immediate aftermath?",
+    "options": {
+      "A": "Byzantine Empire",
+      "B": "Seljuk Sultanate",
+      "C": "Fatimid Caliphate",
+      "D": "County of Tripoli"
+    },
+    "answer_idx": 3,
+    "answer": "Byzantine Empire",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "abadb44d312500f0c28747fbccb2356be325395944b52329979c9560438141ad",
+      "hash_first_sentence": "abadb44d312500f0c28747fbccb2356be325395944b52329979c9560438141ad",
+      "hash_first_question_sentence": "abadb44d312500f0c28747fbccb2356be325395944b52329979c9560438141ad",
+      "hash_last_sentence": "abadb44d312500f0c28747fbccb2356be325395944b52329979c9560438141ad",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-6c410cb38b9b",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1164",
+          "month": "08",
+          "day": "12",
+          "event": "Battle of Harim: Nur ad-Din Zangi defeats the Crusader armies of the County of Tripoli and the Principality of Antioch."
+        },
+        "generation_timestamp": "2025-04-24T01:04:44.318919",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The Kingdom of Jerusalem",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "The Byzantine Empire",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "The Byzantine Empire",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "abadb44d312500f0c28747fbccb2356be325395944b52329979c9560438141ad",
+        "hash_first_sentence": "abadb44d312500f0c28747fbccb2356be325395944b52329979c9560438141ad",
+        "hash_first_question_sentence": "abadb44d312500f0c28747fbccb2356be325395944b52329979c9560438141ad",
+        "hash_last_sentence": "abadb44d312500f0c28747fbccb2356be325395944b52329979c9560438141ad",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-6c7670eb3e29",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Following the deaths of a father and son in Alexandria in August, 30 BCE, a surviving member of the family, also present in the city, was spared execution despite their close blood relation to the deceased.  Given that this survivor was neither sibling nor parent to either of the executed individuals, what familial relationship did this spared survivor have to the deceased?",
+    "options": {
+      "A": "Daughter",
+      "B": "cousin",
+      "C": "grandchild",
+      "D": "niece/nephew"
+    },
+    "answer_idx": 0,
+    "answer": "Daughter",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "42fcea6ed80201bed4b81ef796f6e51ae4942841da224f378f8a3fd5bb106da3",
+      "hash_first_sentence": "517ebb56648bfc18dc938a723782e3336cc963ae9881716a30465b9b5cf836ec",
+      "hash_first_question_sentence": "1434419765601e24f1e8dc3a109bc95fda9e1a91b92345097c477c0597684214",
+      "hash_last_sentence": "1434419765601e24f1e8dc3a109bc95fda9e1a91b92345097c477c0597684214",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-719b3748c096",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 8,
+        "source_event": {
+          "year": "-30",
+          "month": "08",
+          "day": "23",
+          "event": "After the successful invasion of Egypt, Octavian executes Marcus Antonius Antyllus, eldest son of Mark Antony, and Caesarion, the last king of the Ptolemaic dynasty of Egypt and only child of Julius Caesar and Cleopatra.[citation needed]"
+        },
+        "generation_timestamp": "2025-04-24T01:15:59.572972",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The spared survivor was the wife of the deceased father and mother.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "Granddaughter",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "Daughter",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "42fcea6ed80201bed4b81ef796f6e51ae4942841da224f378f8a3fd5bb106da3",
+        "hash_first_sentence": "517ebb56648bfc18dc938a723782e3336cc963ae9881716a30465b9b5cf836ec",
+        "hash_first_question_sentence": "1434419765601e24f1e8dc3a109bc95fda9e1a91b92345097c477c0597684214",
+        "hash_last_sentence": "1434419765601e24f1e8dc3a109bc95fda9e1a91b92345097c477c0597684214",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-71b67faac91c",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Prior to the Ides of March of a certain year, a Roman leader consolidated a significant religious office with his existing imperial role.  Assuming this occurred *after* the traditional founding date of Rome (AUC), but *before* the adoption of Christianity as the official religion of the Empire, how many full calendar years transpired between this consolidation of power and the year conventionally assigned to the birth of Jesus of Nazareth, traditionally understood to be the founder of Christianity?",
+    "options": {
+      "A": "22",
+      "B": "57",
+      "C": "12",
+      "D": "42"
+    },
+    "answer_idx": 2,
+    "answer": "22",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "fd0b1ab52deecc79e0eb52f54b46fcfd860f6d92360d640829fa43c1f35e9768",
+      "hash_first_sentence": "c6263b4005f5b56c480ffc20714532e0ed7125cd0b7dd80eda0bcc6c742b4909",
+      "hash_first_question_sentence": "eb1ca7746cba5bd48fe4d35627be039e26c7cdc74c48222dd430f3efbfba258c",
+      "hash_last_sentence": "eb1ca7746cba5bd48fe4d35627be039e26c7cdc74c48222dd430f3efbfba258c",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-74dd3ae0b1dd",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "-12",
+          "month": "03",
+          "day": "06",
+          "event": "The Roman emperor Augustus is named Pontifex Maximus, incorporating the position into that of the emperor."
+        },
+        "generation_timestamp": "2025-04-24T01:16:08.815881",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "Approximately 44 years.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "44 years",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "45 full calendar years.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "fd0b1ab52deecc79e0eb52f54b46fcfd860f6d92360d640829fa43c1f35e9768",
+        "hash_first_sentence": "c6263b4005f5b56c480ffc20714532e0ed7125cd0b7dd80eda0bcc6c742b4909",
+        "hash_first_question_sentence": "eb1ca7746cba5bd48fe4d35627be039e26c7cdc74c48222dd430f3efbfba258c",
+        "hash_last_sentence": "eb1ca7746cba5bd48fe4d35627be039e26c7cdc74c48222dd430f3efbfba258c",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-755b67455c03",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the papacy of Sixtus IV commenced in 1471, if a man destined to become Pope Julius II received episcopal appointment in Normandy five years into Sixtus IV's reign, in what month would the sixth anniversary of that pontiff's papal election occur?",
+    "options": {
+      "A": "January",
+      "B": "August",
+      "C": "August",
+      "D": "October"
+    },
+    "answer_idx": 1,
+    "answer": "January",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "c9b72584b8b7bfb87b6db6a7dbaf04153fbc2ac5500fd04a9ad804191c50239e",
+      "hash_first_sentence": "c9b72584b8b7bfb87b6db6a7dbaf04153fbc2ac5500fd04a9ad804191c50239e",
+      "hash_first_question_sentence": "c9b72584b8b7bfb87b6db6a7dbaf04153fbc2ac5500fd04a9ad804191c50239e",
+      "hash_last_sentence": "c9b72584b8b7bfb87b6db6a7dbaf04153fbc2ac5500fd04a9ad804191c50239e",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-7bfba9bc5116",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 7,
+        "source_event": {
+          "year": "1476",
+          "month": "07",
+          "day": "11",
+          "event": "Giuliano della Rovere is appointed bishop of Coutances."
+        },
+        "generation_timestamp": "2025-04-24T01:16:21.973151",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "The sixth anniversary of Pope Julius II's papal election would occur in August.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "August 1477",
+            "correct": true
+          },
+          "gpt-4.1": {
+            "answer": "August",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "c9b72584b8b7bfb87b6db6a7dbaf04153fbc2ac5500fd04a9ad804191c50239e",
+        "hash_first_sentence": "c9b72584b8b7bfb87b6db6a7dbaf04153fbc2ac5500fd04a9ad804191c50239e",
+        "hash_first_question_sentence": "c9b72584b8b7bfb87b6db6a7dbaf04153fbc2ac5500fd04a9ad804191c50239e",
+        "hash_last_sentence": "c9b72584b8b7bfb87b6db6a7dbaf04153fbc2ac5500fd04a9ad804191c50239e",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-7bd51ae7b6b7",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Prior to the formal incorporation of the entity responsible for regulating English heraldry under Richard III, how many complete calendar years had elapsed since the beginning of the Wars of the Roses, traditionally dated to the First Battle of St Albans?",
+    "options": {
+      "A": "28",
+      "B": "31 years",
+      "C": "23 years",
+      "D": "17 years"
+    },
+    "answer_idx": 0,
+    "answer": "28",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "193bda14addc3b96eaf3440f7b2663d397d9a9dbd297a4c95c2ffa8e9157132f",
+      "hash_first_sentence": "193bda14addc3b96eaf3440f7b2663d397d9a9dbd297a4c95c2ffa8e9157132f",
+      "hash_first_question_sentence": "193bda14addc3b96eaf3440f7b2663d397d9a9dbd297a4c95c2ffa8e9157132f",
+      "hash_last_sentence": "193bda14addc3b96eaf3440f7b2663d397d9a9dbd297a4c95c2ffa8e9157132f",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-7ca551c2bca7",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 8,
+        "source_event": {
+          "year": "1484",
+          "month": "03",
+          "day": "02",
+          "event": "The College of Arms is formally incorporated by Royal Charter signed by King Richard III of England."
+        },
+        "generation_timestamp": "2025-04-24T01:16:44.425110",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "32 years",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "24 years",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "Twenty-eight complete calendar years.",
+            "correct": true
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "193bda14addc3b96eaf3440f7b2663d397d9a9dbd297a4c95c2ffa8e9157132f",
+        "hash_first_sentence": "193bda14addc3b96eaf3440f7b2663d397d9a9dbd297a4c95c2ffa8e9157132f",
+        "hash_first_question_sentence": "193bda14addc3b96eaf3440f7b2663d397d9a9dbd297a4c95c2ffa8e9157132f",
+        "hash_last_sentence": "193bda14addc3b96eaf3440f7b2663d397d9a9dbd297a4c95c2ffa8e9157132f",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-7ebe778dfed8",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the last day of October in the year 802 fell on a Tuesday, what high-ranking Byzantine official assumed a role on the same weekday of a different month in that year, and how many calendar days separated their respective Tuesdays?",
+    "options": {
+      "A": "Constantine VII Porphyrogennetos was appointed as co-emperor 21 days earlier on the last Tuesday of September",
+      "B": "Theodora, a Byzantine Empress, took office 28 days later on a Tuesday in November",
+      "C": "Nikephoros; 91 days",
+      "D": "Leo the Mathematician became the head of the University of Constantinople 35 days after on the first Tuesday of December"
+    },
+    "answer_idx": 2,
+    "answer": "Constantine VII Porphyrogennetos was appointed as co-emperor 21 days earlier on the last Tuesday of September",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "2f7f53fa931d8cff3e1427f711c602858eccb704e8aa017739567afd296b89d0",
+      "hash_first_sentence": "2f7f53fa931d8cff3e1427f711c602858eccb704e8aa017739567afd296b89d0",
+      "hash_first_question_sentence": "2f7f53fa931d8cff3e1427f711c602858eccb704e8aa017739567afd296b89d0",
+      "hash_last_sentence": "2f7f53fa931d8cff3e1427f711c602858eccb704e8aa017739567afd296b89d0",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-823be67a13f4",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "802",
+          "month": "10",
+          "day": "31",
+          "event": "Empress Irene is deposed and banished to Lesbos. Conspirators place Nikephoros, the minister of finance, on the Byzantine throne."
+        },
+        "generation_timestamp": "2025-04-24T01:17:43.666939",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "Empress Irene assumed the role of Byzantine Empress on a Tuesday in the year 802, and 28 calendar days separated her Tuesday from the last day of October in the same year.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "Nicephorus I became Byzantine Emperor on October 31, 802, which was a Tuesday. If we assume that the last day of October fell on a Tuesday, then the first day of October also fell on a Tuesday. Therefore, Nicephorus I assumed his role 30 days after the first day of October.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "Nikephoros I became Byzantine emperor on Tuesday, 31 October 802; the previous high-ranking official, Empress Irene, was deposed on Sunday, 31 October 802. The next Tuesday before 31 October 802 was 3 October 802, but no major official assumed office on that date. Therefore, no high-ranking Byzantine official is recorded as assuming a role on a Tuesday of a different month in 802, so the answer is: None; no such official is recorded, and thus no days separate their respective Tuesdays.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "2f7f53fa931d8cff3e1427f711c602858eccb704e8aa017739567afd296b89d0",
+        "hash_first_sentence": "2f7f53fa931d8cff3e1427f711c602858eccb704e8aa017739567afd296b89d0",
+        "hash_first_question_sentence": "2f7f53fa931d8cff3e1427f711c602858eccb704e8aa017739567afd296b89d0",
+        "hash_last_sentence": "2f7f53fa931d8cff3e1427f711c602858eccb704e8aa017739567afd296b89d0",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-81be4cb5aebf",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Assuming the Gregorian calendar's adoption in the Low Countries preceded the presentation of a certain petition denouncing religious persecution to the regent of the Habsburg Netherlands,  if the petition's presentation occurred 85 days after the beginning of the year in which it was presented, how many weeks remained in that same year following the day two hundred noblemen, including a certain Lord of Vianen, presented said petition?",
+    "options": {
+      "A": "27 weeks",
+      "B": "25 weeks",
+      "C": "28 weeks",
+      "D": "30 weeks"
+    },
+    "answer_idx": 0,
+    "answer": "27 weeks",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "92e7f90b730e53e7a0773d6b7539f1b0c76d42a2c96a7102470172716d9584b3",
+      "hash_first_sentence": "92e7f90b730e53e7a0773d6b7539f1b0c76d42a2c96a7102470172716d9584b3",
+      "hash_first_question_sentence": "92e7f90b730e53e7a0773d6b7539f1b0c76d42a2c96a7102470172716d9584b3",
+      "hash_last_sentence": "92e7f90b730e53e7a0773d6b7539f1b0c76d42a2c96a7102470172716d9584b3",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-87e7eeaca8f2",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1566",
+          "month": "04",
+          "day": "05",
+          "event": "Two hundred Dutch noblemen, led by Hendrick van Brederode, force themselves into the presence of Margaret of Parma and present the Petition of Compromise, denouncing the Spanish Inquisition in the Seventeen Provinces."
+        },
+        "generation_timestamp": "2025-04-24T01:23:30.448251",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "There were 13 weeks remaining in the year following the presentation of the petition by the two hundred noblemen, including the Lord of Vianen.",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "37 weeks",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "There were 40 weeks remaining in the year after the petition was presented.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "92e7f90b730e53e7a0773d6b7539f1b0c76d42a2c96a7102470172716d9584b3",
+        "hash_first_sentence": "92e7f90b730e53e7a0773d6b7539f1b0c76d42a2c96a7102470172716d9584b3",
+        "hash_first_question_sentence": "92e7f90b730e53e7a0773d6b7539f1b0c76d42a2c96a7102470172716d9584b3",
+        "hash_last_sentence": "92e7f90b730e53e7a0773d6b7539f1b0c76d42a2c96a7102470172716d9584b3",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-871d134690b0",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  },
+  {
+    "question": "Prior to the establishment of Uppsala as the ecclesiastical center of Sweden, a pivotal event solidified the primacy of another Scandinavian city in regional religious affairs.  Assuming the Julian calendar and a seven-day week starting on Sunday, what day of the week did this shift in influence, marked by the consecration of a major cathedral altar, occur?",
+    "options": {
+      "A": "Wednesday",
+      "B": "Monday",
+      "C": "Tuesday",
+      "D": "Friday"
+    },
+    "answer_idx": 2,
+    "answer": "Wednesday",
+    "meta_info": "",
+    "other": {
+      "hash_full_question": "36e33391165737473049d29d50bf92f9f5e863862900428201d7a742c8b891a7",
+      "hash_first_sentence": "cc16c55c4063de00339841a3ff5ff2f871882dddd758e7b200fa26bcb39857ce",
+      "hash_first_question_sentence": "84c30ec50725962bfa69edbdf6c46b0c6954267636cd55312cb84b4a3a22bf58",
+      "hash_last_sentence": "84c30ec50725962bfa69edbdf6c46b0c6954267636cd55312cb84b4a3a22bf58",
+      "stdQuestionUUID": "01966d9d-1c40-7335-a938-8a69be17bf46",
+      "mmlu-pro__answer_index": 0,
+      "mmlu-pro__cot_content": "",
+      "mmlu-pro__category": {
+        "difficulty_score": 10,
+        "source_event": {
+          "year": "1145",
+          "month": "09",
+          "day": "01",
+          "event": "The main altar of Lund Cathedral, at the time seat of the archiepiscopal see of all the Nordic countries, is consecrated."
+        },
+        "generation_timestamp": "2025-04-24T01:24:51.912686",
+        "model_answers": {
+          "gpt-3.5-turbo": {
+            "answer": "Wednesday",
+            "correct": false
+          },
+          "gpt-4": {
+            "answer": "This question cannot be answered with general knowledge as it requires specific historical data about the consecration of a cathedral altar in a Scandinavian city before Uppsala became the ecclesiastical center of Sweden.",
+            "correct": false
+          },
+          "gpt-4.1": {
+            "answer": "The shift occurred on Sunday, September 30, 1104, with the consecration of the altar at Lund Cathedral.",
+            "correct": false
+          }
+        }
+      },
+      "mmlu-pro__other": {
+        "hash_full_question": "36e33391165737473049d29d50bf92f9f5e863862900428201d7a742c8b891a7",
+        "hash_first_sentence": "cc16c55c4063de00339841a3ff5ff2f871882dddd758e7b200fa26bcb39857ce",
+        "hash_first_question_sentence": "84c30ec50725962bfa69edbdf6c46b0c6954267636cd55312cb84b4a3a22bf58",
+        "hash_last_sentence": "84c30ec50725962bfa69edbdf6c46b0c6954267636cd55312cb84b4a3a22bf58",
+        "stdQuestionUUID": "01966d99-28de-773d-b033-8b821c6a496a",
+        "preSTDsrcFileName": "enhanced_questions-history.json",
+        "preSTDsrcCID": "bafkreid2v4inb4epgfxczm2k5dxrmkj3cjhgqnwjr6ykfqucnefw52lc2u"
+      },
+      "preSTDsrcFileName": "mmlupro-history-NEW_HUMAN_QUESTIONS_Jason_danel.json",
+      "preSTDsrcCID": "bafkreicefozs2oj5j36y27tydk74moy7yrkhyfx6qiazsxhrghnew3ca3y"
+    }
+  }
+]

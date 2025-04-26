@@ -614,8 +614,49 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
                 }
                 
                 // Create a hash of the question to check for duplicates
-                const questionData = q.question + JSON.stringify(q.options) + q.answer;
-                const questionHash = await createQuestionHash(questionData);
+                const questionData = q.question
+                let questionHash;
+                
+                // First check if the source data already has a question_hash
+                if (q.question_hash) {
+                    // Use the existing hash from the source data
+                    questionHash = q.question_hash;
+                } else if (q.other && q.other.question_hash) {
+                    // Try to get hash from the other field if it exists
+                    questionHash = q.other.question_hash;
+                } else if (q.other && q.other.hash_full_question) {
+                    // Try to get hash_full_question from the other field if it exists
+                    questionHash = q.other.hash_full_question;
+                } else {
+                    // Generate a new hash if no existing hash found
+                    questionHash = await createQuestionHash(questionData);
+                }
+                
+                // Look for source question UUID in various possible locations
+                let srcQuestionUid = null;
+                if (q.stdQuestionUUID) {
+                    srcQuestionUid = q.stdQuestionUUID;
+                } else if (q.other && q.other.stdQuestionUUID) {
+                    srcQuestionUid = q.other.stdQuestionUUID;
+                } else if (q.src_question_uid) {
+                    srcQuestionUid = q.src_question_uid;
+                } else if (q.other && q.other.src_question_uid) {
+                    srcQuestionUid = q.other.src_question_uid;
+                }
+                // No fallback for srcQuestionUid - it will remain null if not found
+                
+                // Look for source question hash in various possible locations - DON'T generate if not found
+                let srcQuestionHash = null;
+                if (q.src_question_hash) {
+                    srcQuestionHash = q.src_question_hash;
+                } else if (q.other && q.other.src_question_hash) {
+                    srcQuestionHash = q.other.src_question_hash;
+                } else if (q.hash_full_question) {
+                    srcQuestionHash = q.hash_full_question;
+                } else if (q.other && q.other.hash_full_question) {
+                    srcQuestionHash = q.other.hash_full_question;
+                }
+                // No fallback - we don't generate a new src_question_hash if not found
                 
                 // Define known fields that we explicitly map to database columns
                 const knownMappedFields = [
@@ -625,6 +666,8 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
                     'answer_idx',
                     'meta_info',
                     'question_hash',
+                    "src_question_hash",
+                    "src_question_uid",
                     'other'  // 'other' is directly mapped to the database column
                 ];
                 
@@ -656,7 +699,9 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
                     meta_info: q.meta_info || null,
                     answer_count: 0,
                     extraJ: fileMetadata, // Pass object directly, not stringified
-                    src_file_content_hash: fileContentHash  // Add file content hash
+                    src_file_content_hash: fileContentHash,  // Add file content hash
+                    src_question_uid: srcQuestionUid,
+                    src_question_hash: srcQuestionHash
                 };
                 
                 // Add 'other' column if present in the source file
@@ -743,7 +788,7 @@ async function uploadQuestions(questions, questionSet, fileMetadata) {
 // Helper function to create a hash of a question for duplicate detection
 async function createQuestionHash(questionText) {
     const encoder = new TextEncoder();
-    const data = encoder.encode(questionText.trim().toLowerCase());
+    const data = encoder.encode(questionText);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');

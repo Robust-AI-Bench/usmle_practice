@@ -1,21 +1,30 @@
 -- Questions table
-CREATE TABLE IF NOT EXISTS questions (
-  question_id SERIAL PRIMARY KEY,
-  question_set TEXT NOT NULL,
-  question TEXT NOT NULL,
-  options JSONB NOT NULL,
-  answer TEXT NOT NULL,
-  answer_idx TEXT NOT NULL,
-  question_hash TEXT NOT NULL,
-  meta_info TEXT,
-  answer_count INTEGER DEFAULT 0,
-  extraJ JSONB,
-  other JSONB,
-  overflow JSONB,
-  src_file_content_hash TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- public.questions definition
 
+-- Drop table
+
+-- DROP TABLE public.questions;
+
+CREATE if not exists TABLE public.questions (
+	question_id serial4 NOT NULL,
+	question_set text NOT NULL,
+	question text NOT NULL,
+	"options" jsonb NOT NULL,
+	answer text NOT NULL,
+	answer_idx text NOT NULL,
+	question_hash text NOT NULL,
+	meta_info text NULL,
+	answer_count int4 DEFAULT 0 NULL,
+	created_at timestamptz DEFAULT now() NULL,
+	"extraJ" jsonb NULL,
+	other jsonb NULL,
+	overflow jsonb NULL,
+	user_id uuid DEFAULT auth.uid() NULL,
+	src_file_id int8 NULL,
+	src_file_content_hash text NULL,
+	CONSTRAINT questions_pkey PRIMARY KEY (question_id)
+);
+ 
 CREATE INDEX IF NOT EXISTS idx_questions_question_set ON questions(question_set);
 CREATE INDEX IF NOT EXISTS idx_questions_question_hash ON questions(question_hash);
 
