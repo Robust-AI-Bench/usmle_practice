@@ -38,6 +38,13 @@ const cancelFlagBtn = document.getElementById('cancel-flag-btn');
 const flagDetails = document.getElementById('flag-details');
 const completionContainer = document.getElementById('completion-container');
 const restartBtn = document.getElementById('restart-btn');
+const debugInfo = document.getElementById('debug-info');
+const debugQuestionId = document.getElementById('debug-question-id');
+const debugQuestionSet = document.getElementById('debug-question-set');
+const debugQuestionHash = document.getElementById('debug-question-hash');
+const debugSrcQuestionHash = document.getElementById('debug-src-question-hash');
+const debugSrcQuestionUid = document.getElementById('debug-src-question-uid');
+const debugSrcFileContentHash = document.getElementById('debug-src-file-content-hash');
 
 // App state
 let currentUser = null;
@@ -585,10 +592,20 @@ function displayQuestion() {
         questionNumber.textContent = `Question ${currentQuestionIndex + 1}/${currentQuestions.length} [ID: ${question.question_id}]`;
         questionSet.textContent = question.set;
         questionSet.style.display = 'block';
+        
+        // Show and populate debug info
+        debugInfo.style.display = 'block';
+        debugQuestionId.textContent = `question_id: ${question.question_id || 'N/A'}`;
+        debugQuestionSet.textContent = `question_set: ${question.question_set || 'N/A'}`;
+        debugQuestionHash.textContent = `question_hash: ${question.question_hash || 'N/A'}`;
+        debugSrcQuestionHash.textContent = `src_question_hash: ${question.src_question_hash || 'N/A'}`;
+        debugSrcQuestionUid.textContent = `src_question_uid: ${question.src_question_uid || 'N/A'}`;
+        debugSrcFileContentHash.textContent = `src_file_content_hash: ${question.src_file_content_hash || 'N/A'}`;
     } else {
         // Regular display without debug info
         questionNumber.textContent = `Question ${currentQuestionIndex + 1}/${currentQuestions.length}`;
         questionSet.style.display = 'none';
+        debugInfo.style.display = 'none';
     }
     
     questionText.textContent = question.question;

@@ -5,7 +5,8 @@
 
 -- DROP TABLE public.questions;
 
-CREATE if not exists TABLE public.questions (
+
+CREATE TABLE public.questions (
 	question_id serial4 NOT NULL,
 	question_set text NOT NULL,
 	question text NOT NULL,
@@ -22,6 +23,8 @@ CREATE if not exists TABLE public.questions (
 	user_id uuid DEFAULT auth.uid() NULL,
 	src_file_id int8 NULL,
 	src_file_content_hash text NULL,
+	src_question_hash text NULL,
+	src_question_uid text NULL,
 	CONSTRAINT questions_pkey PRIMARY KEY (question_id)
 );
  
