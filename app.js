@@ -499,8 +499,17 @@ function interleaveQuestions(questionsFromSets) {
     }
     
     if (setsWithQuestions.length === 1) {
-        // If only one set has questions, shuffle those and return
-        return shuffleArray([...questionsFromSets[setsWithQuestions[0]]]);
+        // If only one set has questions
+        const setName = setsWithQuestions[0];
+        
+        // Special case: If it's a file hash filtered set, don't shuffle
+        // to maintain question_id ordering
+        if (setName === 'file_hash_filtered') {
+            return [...questionsFromSets[setName]];
+        }
+        
+        // For regular question sets, shuffle as before
+        return shuffleArray([...questionsFromSets[setName]]);
     }
     
     // Get the maximum number of questions from any set
@@ -926,7 +935,7 @@ async function loadMoreQuestions() {
                         src_file_content_hash: specificFileHash
                     }));
                     
-                    // Add to current questions
+                    // Add to current questions without shuffling
                     currentQuestions = [...currentQuestions, ...newQuestions];
                     console.log(`Added ${newQuestions.length} more questions by file hash`);
                     
