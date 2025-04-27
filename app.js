@@ -613,8 +613,22 @@ function displayQuestion() {
     // Clear the options container
     optionsContainer.innerHTML = '';
     
-    // Add the options
-    const options = JSON.parse(question.options);
+    // Handle options - could be string JSON or already-parsed object
+    let options;
+    try {
+        // Check if options is already an object
+        if (typeof question.options === 'object' && question.options !== null) {
+            options = question.options;
+        } else {
+            // Try to parse as JSON
+            options = JSON.parse(question.options);
+        }
+    } catch (error) {
+        console.error('Error parsing options:', error, question.options);
+        // Fallback to empty options
+        options = {};
+    }
+    
     Object.keys(options).forEach(key => {
         const optionBtn = document.createElement('button');
         optionBtn.className = 'option-btn';
@@ -746,7 +760,22 @@ async function submitAnswer() {
         resultFeedback.textContent = isCorrect ? 'Correct!' : 'Incorrect';
     }
     
-    correctAnswerDisplay.innerHTML = `<p>The correct answer is: <strong>${question.answer_idx}. ${JSON.parse(question.options)[question.answer_idx]}</strong></p>`;
+    // Handle options - could be string JSON or already-parsed object
+    let options;
+    try {
+        // Check if options is already an object
+        if (typeof question.options === 'object' && question.options !== null) {
+            options = question.options;
+        } else {
+            // Try to parse as JSON
+            options = JSON.parse(question.options);
+        }
+    } catch (error) {
+        console.error('Error parsing options for correct answer display:', error);
+        options = {};
+    }
+    
+    correctAnswerDisplay.innerHTML = `<p>The correct answer is: <strong>${question.answer_idx}. ${options[question.answer_idx] || 'Unknown'}</strong></p>`;
     feedbackContainer.style.display = 'block';
     
     // If this is the last question, modify the UI
