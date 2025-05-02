@@ -135,3 +135,34 @@ create view IF NOT EXISTS   public.view_file_content_aggas as select q.src_file_
 from   questions  q  
 left join  file_log  f  on q.src_file_content_hash=f.content_hash
   group by q.src_file_content_hash ;
+
+
+
+-- public.test_scores definition
+
+-- Drop table
+
+-- DROP TABLE public.test_scores;
+
+CREATE  TABLE if not exists  public.test_scores (
+	id serial4 NOT NULL,
+	evaluationrunid text NOT NULL,
+	modeldid text NOT NULL,
+	validatordid text NOT NULL,
+	score numeric(5, 2) NOT NULL,
+	metrics jsonb NULL,
+	evaluationdid text NULL,
+	hash text NULL,
+	metadata json NULL,
+	peer_reviews json NULL,
+	promptcid text NULL,
+	responsecid text NULL,
+	promptdata text NULL,
+	responsedata text NULL,
+	correctresponse text NULL,
+	repliedat int8 NULL,
+	updatedat int8 NULL,
+	promptedat int8 NULL,
+	user_id uuid DEFAULT auth.uid() NULL,
+	CONSTRAINT test_scores_pkey PRIMARY KEY (id)
+);
